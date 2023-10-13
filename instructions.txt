@@ -1,54 +1,48 @@
 [Section 1]
-Tabuleiro e Peças
-O Dara joga-se num tabuleiro 6 linhas x 5 colunas
-Outras dimensões são possíveis, como 6 x 6
-Cada um dos 2 jogadores tem 12 peças
-Um jogador joga com preças pretas, outro com as brancas
-Todas as peças 22 estão sempre visíveis, no tabuleiro ou fora
-Peças fora do tabuleiro são agrupadas por cor, de cada lado
+<b>Tabuleiro e Peças</b></br>
+O Dara joga-se num tabuleiro 6 linhas x 5 colunas</br>
+Outras dimensões são possíveis, como 6 x 6</br>
+Cada um dos 2 jogadores tem 12 peças</br>
+Um jogador joga com preças azuis, outro com as laranja</br>
+Todas as 24 peças estão sempre visíveis, no tabuleiro ou fora</br>
+Peças fora do tabuleiro são agrupadas por cor, de cada lado</br>
 
 [Section 2]
-Regras Básicas
-Jogadores escolhem uma cor e decidem quem joga primeiro
-Inicialmente o tabuleiro está vazio
-O jogo tem 2 fases:
-Fase 1 - Pôr as peças (drop)
-Fase 2 - Mover as peças (move)
-No exemplo acima o tabuleiro está entre as 2 fases
+<b>Regras Básicas</b></br>
+Jogadores escolhem uma cor e decidem quem joga primeiro</br>
+Inicialmente o tabuleiro está vazio</br>
+O jogo tem 2 fases:</br>
+- Fase 1 - Pôr as peças (drop)</br>
+- Fase 2 - Mover as peças (move)</br>
 
 [Section 3]
-Em Linha
-São consideradas em linha
-- sequências de 3 ou mais peças contíguas
-- na horizontal ou vertical (não na diagonal)
-- todas da mesma cor
-No exemplo acima há apenas 2 linhas
-- a 1ª coluna a contar da esquerda têm uma linha branca
-- a 4ª linha a contar do topo tem uma linha preta
+<b>Em Linha</b></br>
+São consideradas em linha</br>
+- sequências de 3 ou mais peças contíguas</br>
+- na horizontal ou vertical (não na diagonal)</br>
+- todas da mesma cor</br>
 
 [Section 4]
-Pôr as Peças
-Jogadores põem alternadamente uma peça sua numa casa livre
-Não podem podem ser postas mais de 3 peças em linha
-Podem existir 3 peças em linha (mas não é vantajoso)
-No exemplo acima, cada jogador já colocou uma peça
+<b>Pôr as Peças</b></br>
+Jogadores põem alternadamente uma peça sua numa casa livre</br>
+Não podem podem ser postas mais de 3 peças em linha</br>
+Podem existir 3 peças em linha (mas não é vantajoso)</br>
 
 [Section 5]
-Mover as Peças
-Cada jogador move alternadamente uma peça da sua cor
-Uma peça só pode ser movida para uma casa contígua
-Peças movidas apenas na horizontal ou vertical (não na diagonal)
-Uma linha de tamanho 3 permite capturar peça do adversário
-Neste caso, remove uma peça do adversário à sua escolha
-Só uma peça é removida por jogada (mesmo sendo formadas várias linhas)
-Não podem ser formadas linhas com mais de 3 peças
-Uma peça não pode retornar à posição da jogada anterior
-Só poderá retornar a essa casa nas jogadas seguintes
+<b>Mover as Peças</b></br>
+Cada jogador move alternadamente uma peça da sua cor</br>
+Uma peça só pode ser movida para uma casa contígua</br>
+Peças movidas apenas na horizontal ou vertical (não na diagonal)</br>
+Uma linha de tamanho 3 permite capturar peça do adversário</br>
+Neste caso, remove uma peça do adversário à sua escolha</br>
+Só uma peça é removida por jogada (mesmo sendo formadas várias linhas)</br>
+Não podem ser formadas linhas com mais de 3 peças</br>
+Uma peça não pode retornar à posição da jogada anterior</br>
+Só poderá retornar a essa casa nas jogadas seguintes</br>
 
 [Section 6]
-Fim do Jogo
-O jogo termina quando um jogador não puder ganhar
-Por exemplo, se tiver apenas 2 peças no tabuleiro
-Ou se não puder realizar uma jogada válida
-O jogador que não pode ganhar perde o jogo
-No exemplo acima, ganham as brancas
+<b>Fim do Jogo</b></br>
+O jogo termina quando um jogador não puder ganhar</br>
+Por exemplo, se tiver apenas 2 peças no tabuleiro</br>
+Ou se não puder realizar uma jogada válida</br>
+O jogador que não pode ganhar perde o jogo</br>
