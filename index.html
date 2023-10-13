@@ -1,12 +1,66 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <meta charset="UFT-8" />
-    <title>Dara</title>
+    <title>Dara Game</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style.css" />
   </head>
 
   <body>
-    <p>hello</p>
+    <section id="login">
+      <h2>Login</h2>
+      <label for="username">Username:</label>
+      <input type="text" id="username" name="username" /><br />
+      <label for="password">Password:</label>
+      <input type="password" id="password" name="password" /><br />
+      <button id="playAsGuestButton">Play as Guest</button>
+    </section>
+
+    <section id="options">
+      <h2>Options</h2>
+      <label for="boardSize">Board Size:</label>
+      <select id="boardSize">
+        <option value="5x6">5x6</option>
+        <option value="6x6">6x6</option>
+      </select>
+
+      <label for="opponent">Play Against:</label>
+      <select id="opponent">
+        <option value="computer">Computer</option>
+        <option value="friend">Friend</option>
+      </select>
+
+      <label for="difficulty">Difficulty:</label>
+      <select id="difficulty">
+        <option value="easy">Easy</option>
+        <option value="medium">Medium</option>
+        <option value="hard">Hard</option>
+      </select>
+
+      <label for="firstToPlay">First to Play:</label>
+      <select id="firstToPlay">
+        <option value="player1">Player 1</option>
+        <option value="player2">Player 2</option>
+        <option value="random">Random</option>
+      </select>
+
+      <button id="startGameButton">Start Game</button>
+    </section>
+
+    <section id="game">
+      <h2>Game</h2>
+      <div id="board">
+        <!-- The board and pieces will be dynamically generated based on the game state -->
+      </div>
+      <div id="unplayedPieces">
+        <!-- Display the pieces that have not yet been played -->
+      </div>
+      <button id="homeScreenButton">Home Screen</button>
+      <button id="leaderboardButton">Leaderboard</button>
+      <button id="instructionsButton">Instructions</button>
+    </section>
+
+    <script src="script.js"></script>
   </body>
 </html>
