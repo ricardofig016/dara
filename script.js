@@ -47,15 +47,15 @@ function togglePieceImage() {
   const pieceImage = document.getElementById("piece-image");
 
   if (!piece) {
-    piece = "assets/orange_piece.jpeg";
+    piece = "assets/orange_piece.png";
   }
 
-  if (piece === "assets/orange_piece.jpeg") {
-    piece = "assets/blue_piece.jpeg";
-    pieceImage.src = "assets/blue_piece.jpeg";
+  if (piece === "assets/orange_piece.png") {
+    piece = "assets/blue_piece.png";
+    pieceImage.src = "assets/blue_piece.png";
   } else {
-    piece = "assets/orange_piece.jpeg";
-    pieceImage.src = "assets/orange_piece.jpeg";
+    piece = "assets/orange_piece.png";
+    pieceImage.src = "assets/orange_piece.png";
   }
 }
 
@@ -71,7 +71,7 @@ function toggleDifficultyDiv() {
 }
 function resetOptions() {
   // Reset Piece Color
-  if (piece === "assets/blue_piece.jpeg") {
+  if (piece === "assets/blue_piece.png") {
     togglePieceImage();
   }
   // Reset all selects to the first option
