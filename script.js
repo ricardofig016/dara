@@ -10,17 +10,23 @@ function handleLogin() {
   document.getElementById("options").style.display = "block";
 }
 
+function displayLoginErrorMessage() {
+  const errorMessage = document.getElementById("login-error-message");
+  errorMessage.style.display = "block"; // Display the error message
+}
+
 function goToHome() {
   document.getElementById("options").style.display = "none";
   document.getElementById("game").style.display = "none";
   document.getElementById("login").style.display = "block";
+  document.getElementById("login-error-message").style.display = "none";
 }
 
 function startGame() {
-  boardSize = document.getElementById("boardSize").value;
+  boardSize = document.getElementById("board-size").value;
   opponent = document.getElementById("opponent").value;
   difficulty = document.getElementById("difficulty").value;
-  firstToPlay = document.getElementById("firstToPlay").value;
+  firstToPlay = document.getElementById("first-to-play").value;
 
   // Hide the options and show the game section
   document.getElementById("options").style.display = "none";
@@ -150,13 +156,20 @@ function showLeaderboard() {} // implement this
 
 // Event listeners for buttons
 document
-  .getElementById("playAsGuestButton")
-  .addEventListener("click", handleLogin);
-document.getElementById("startGameButton").addEventListener("click", startGame);
-document.getElementById("homeScreenButton").addEventListener("click", goToHome);
+  .getElementById("login-button")
+  .addEventListener("click", displayLoginErrorMessage);
 document
-  .getElementById("instructionsButton")
+  .getElementById("play-as-guest-button")
+  .addEventListener("click", handleLogin);
+document
+  .getElementById("start-game-button")
+  .addEventListener("click", startGame);
+document
+  .getElementById("home-screen-button")
+  .addEventListener("click", goToHome);
+document
+  .getElementById("instructions-button")
   .addEventListener("click", showInstructions);
 document
-  .getElementById("leaderboardButton")
+  .getElementById("leaderboard-button")
   .addEventListener("click", showLeaderboard);
