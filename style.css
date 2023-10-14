@@ -18,6 +18,23 @@ body {
   padding: 0;
 }
 
+nav {
+  background-color: #eaeaea;
+  padding: 10px 40px;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;
+  width: 100%;
+  top: 0;
+}
+
+.logo img {
+  width: 120px;
+  margin-top: 8px;
+}
+
 #login {
   padding: 20px;
   background-color: #eaeaea;
