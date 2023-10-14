@@ -18,9 +18,28 @@ body {
   padding: 0;
 }
 
+button {
+  border: none;
+  background-color: var(--blue);
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--orange);
+}
+
+button:active {
+  background-color: var(--dark_orange);
+}
+
 nav {
   background-color: #eaeaea;
-  padding: 10px 40px;
+  padding: 10px 14%;
   box-sizing: border-box;
   display: flex;
   justify-content: space-between;
@@ -68,22 +87,6 @@ nav {
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: none;
-  background-color: var(--blue);
-  color: white;
-  text-align: center;
-  text-decoration: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#login button:hover {
-  background-color: var(--orange);
-}
-
-#login button:active {
-  background-color: var(--dark_orange);
 }
 
 #login-error-message {
@@ -112,20 +115,6 @@ nav {
   margin-right: 10px;
   margin-bottom: 10px;
   padding: 10px 20px;
-  font-size: 16px;
-  background-color: var(--blue);
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-#options button:hover {
-  background-color: var(--orange);
-}
-#options button:active {
-  background-color: var(--dark_orange);
 }
 
 #options h2 {
@@ -154,13 +143,8 @@ nav {
 
 #options #piece-toggle-button {
   background-color: white;
-  border-width: 2;
-  border-style: solid;
   padding: 0;
-  background: none;
-  cursor: pointer;
   margin-top: 10px;
-  transition: border-color 0.3s ease;
 }
 
 #options #difficulty-div {
@@ -206,20 +190,12 @@ nav {
 }
 
 .popup-content button {
+  color: black;
   font-size: 24px;
   background: transparent;
   border: none;
   cursor: pointer;
   margin: 5px 0;
-}
-
-.popup-content button:focus {
-  outline: none;
-}
-
-.popup-content button::before {
-  content: attr(data-text);
-  display: inline-block;
 }
 
 @font-face {
