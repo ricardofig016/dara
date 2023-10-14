@@ -1,48 +1,48 @@
 [Section 1]
-<b>Tabuleiro e Peças</b></br>
-O Dara joga-se num tabuleiro 6 linhas x 5 colunas</br>
-Outras dimensões são possíveis, como 6 x 6</br>
-Cada um dos 2 jogadores tem 12 peças</br>
-Um jogador joga com preças azuis, outro com as laranja</br>
-Todas as 24 peças estão sempre visíveis, no tabuleiro ou fora</br>
-Peças fora do tabuleiro são agrupadas por cor, de cada lado</br>
+<b>Board and Pieces</b></br>
+Dara is played on a 6 x 5 board</br>
+Other dimensions are possible, like 6 x 6</br>
+Each of the 2 players has 12 pieces</br>
+One player plays with blue pieces, the other with orange ones</br>
+All 24 pieces are always visible, either on or off the board</br>
+Pieces off the board are grouped by color, on each player's side</br>
 
 [Section 2]
-<b>Regras Básicas</b></br>
-Jogadores escolhem uma cor e decidem quem joga primeiro</br>
-Inicialmente o tabuleiro está vazio</br>
-O jogo tem 2 fases:</br>
-- Fase 1 - Pôr as peças (drop)</br>
-- Fase 2 - Mover as peças (move)</br>
+<b>Basic Rules</b></br>
+Players choose a color and decide who plays first</br>
+Initially, the board is empty</br>
+The game has 2 phases:</br>
+- Phase 1 - Drop the pieces</br>
+- Phase 2 - Move the pieces</br>
 
 [Section 3]
-<b>Em Linha</b></br>
-São consideradas em linha</br>
-- sequências de 3 ou mais peças contíguas</br>
-- na horizontal ou vertical (não na diagonal)</br>
-- todas da mesma cor</br>
+<b>In a Line</b></br>
+Are considered in a line:</br>
+- sequences of 3 or more contiguous pieces</br>
+- horizontally or vertically (not diagonally)</br>
+- all of the same color</br>
 
 [Section 4]
-<b>Pôr as Peças</b></br>
-Jogadores põem alternadamente uma peça sua numa casa livre</br>
-Não podem podem ser postas mais de 3 peças em linha</br>
-Podem existir 3 peças em linha (mas não é vantajoso)</br>
+<b>Placing the Pieces</b></br>
+Players alternately place one of their pieces on an empty cell</br>
+No more than 3 pieces can be placed in a line</br>
+There can be 3 pieces in a line (but it's not advantageous)</br>
 
 [Section 5]
-<b>Mover as Peças</b></br>
-Cada jogador move alternadamente uma peça da sua cor</br>
-Uma peça só pode ser movida para uma casa contígua</br>
-Peças movidas apenas na horizontal ou vertical (não na diagonal)</br>
-Uma linha de tamanho 3 permite capturar peça do adversário</br>
-Neste caso, remove uma peça do adversário à sua escolha</br>
-Só uma peça é removida por jogada (mesmo sendo formadas várias linhas)</br>
-Não podem ser formadas linhas com mais de 3 peças</br>
-Uma peça não pode retornar à posição da jogada anterior</br>
-Só poderá retornar a essa casa nas jogadas seguintes</br>
+<b>Moving the Pieces</b></br>
+Each player alternately moves one piece of their color</br>
+A piece can only be moved to an adjacent cell</br>
+Pieces are moved only horizontally or vertically (not diagonally)</br>
+A line of size 3 allows capturing an opponent's piece</br>
+In this case, remove one of the opponent's pieces</br>
+Only one piece is removed per move (even if multiple lines are formed)</br>
+Lines with more than 3 pieces cannot be formed</br>
+A piece cannot return to the cell it was on the previous move</br>
+It can only return to that cell in the following moves</br>
 
 [Section 6]
-<b>Fim do Jogo</b></br>
-O jogo termina quando um jogador não puder ganhar</br>
-Por exemplo, se tiver apenas 2 peças no tabuleiro</br>
-Ou se não puder realizar uma jogada válida</br>
-O jogador que não pode ganhar perde o jogo</br>
+<b>End of the Game</b></br>
+The game ends when a player cannot win</br>
+For example, if they only have 2 pieces on the board</br>
+Or if they cannot make a valid move</br>
+The player who cannot win loses the game</br>
