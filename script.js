@@ -5,14 +5,14 @@ let opponent = "";
 let difficulty = "";
 let firstToPlay = "";
 
-function handleLogin() {
+function handleLogin(isGuest) {
   // Hide Login and display Options
   document.getElementById("login").style.display = "none";
   document.getElementById("options").style.display = "block";
 
   // Assign values to the variables
   username = document.getElementById("username").value;
-  if (!username) {
+  if (isGuest) {
     username = "guest";
   }
 }
@@ -23,10 +23,24 @@ function displayLoginErrorMessage() {
 }
 
 function goToHome() {
+  // Hide sections
   document.getElementById("options").style.display = "none";
   document.getElementById("game").style.display = "none";
+
+  // Display Login
   document.getElementById("login").style.display = "block";
+
+  // Clear error message and input boxes
   document.getElementById("login-error-message").style.display = "none";
+  document.getElementById("username").value = "";
+  document.getElementById("password").value = "";
+}
+
+function goToOptions() {
+  document.getElementById("login").style.display = "none";
+  document.getElementById("game").style.display = "none";
+  document.getElementById("options").style.display = "block";
+  resetOptions();
 }
 
 function togglePieceImage() {
@@ -69,6 +83,7 @@ function resetOptions() {
 }
 
 function startGame() {
+  // Get selected options
   boardSize = document.getElementById("board-size").value;
   opponent = document.getElementById("opponent").value;
   difficulty = document.getElementById("difficulty").value;
@@ -81,12 +96,35 @@ function startGame() {
   // Initialize and start the game logic here based on selected options
   // ...
 
-  // For demonstration purposes, let's just log the selected options
+  // Log options to the console
   console.log("Selected options: ", {
+    username,
     boardSize,
+    piece,
     opponent,
     difficulty,
     firstToPlay,
+  });
+}
+
+// ---------------------- NOT COMPLETED ----------------------
+function showLeaderboard() {
+  // Display popup
+  document.getElementById("leaderboard-popup").style.display = "flex";
+
+  // Get elements
+  const closeButton = document.getElementById("leaderboard-popup-close");
+
+  // Add an event listener to close the popup when the close button is clicked
+  closeButton.addEventListener("click", () => {
+    document.getElementById("leaderboard-popup").style.display = "none";
+  });
+
+  // Add an event listener to close the popup when ESCAPE is pressed
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      document.getElementById("leaderboard-popup").style.display = "none";
+    }
   });
 }
 
@@ -94,10 +132,10 @@ function showRules() {
   // Variable to keep track of the current section
   let currentSection = 1;
 
-  // Change display of popup element
+  // Display popup
   document.getElementById("rules-popup").style.display = "flex";
 
-  // Get "Previous" and "Next" buttons
+  // Get elements
   const closeButton = document.getElementById("rules-popup-close");
   const prevButton = document.getElementById("rules-prev-button");
   const nextButton = document.getElementById("rules-next-button");
@@ -118,12 +156,12 @@ function showRules() {
       rules.innerText = "Failed to fetch rules.";
     });
 
-  // Add an event listener to close the pop-up when the close button is clicked
+  // Add an event listener to close the popup when the close button is clicked
   closeButton.addEventListener("click", () => {
     document.getElementById("rules-popup").style.display = "none";
   });
 
-  // Add an event listener to close the pop-up when ESCAPE is pressed
+  // Add an event listener to close the popup when ESCAPE is pressed
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       document.getElementById("rules-popup").style.display = "none";
@@ -167,15 +205,37 @@ function showRules() {
   });
 }
 
-function showLeaderboard() {} // implement this
+// ---------------------- NOT COMPLETED ----------------------
+function showSettings() {
+  // Display popup
+  document.getElementById("settings-popup").style.display = "flex";
+
+  // Get elements
+  const closeButton = document.getElementById("settings-popup-close");
+
+  // Add an event listener to close the popup when the close button is clicked
+  closeButton.addEventListener("click", () => {
+    document.getElementById("settings-popup").style.display = "none";
+  });
+
+  // Add an event listener to close the popup when ESCAPE is pressed
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      document.getElementById("settings-popup").style.display = "none";
+    }
+  });
+}
 
 // Event listeners for buttons
+document.getElementById("logo-button").addEventListener("click", goToHome);
 document
   .getElementById("login-button")
   .addEventListener("click", displayLoginErrorMessage);
 document
   .getElementById("play-as-guest-button")
-  .addEventListener("click", handleLogin);
+  .addEventListener("click", () => {
+    handleLogin(true);
+  });
 document
   .getElementById("piece-toggle-button")
   .addEventListener("click", togglePieceImage);
@@ -188,11 +248,17 @@ document
 for (const button of document.getElementsByClassName("home-screen-button")) {
   button.addEventListener("click", goToHome);
 }
+for (const button of document.getElementsByClassName("options-button")) {
+  button.addEventListener("click", goToOptions);
+}
 for (const button of document.getElementsByClassName("leaderboard-button")) {
   button.addEventListener("click", showLeaderboard);
 }
 for (const button of document.getElementsByClassName("rules-button")) {
   button.addEventListener("click", showRules);
+}
+for (const button of document.getElementsByClassName("settings-button")) {
+  button.addEventListener("click", showSettings);
 }
 
 // Add an event listener to the opponent dropdown

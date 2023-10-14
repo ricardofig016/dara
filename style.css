@@ -37,10 +37,11 @@ button:active {
   background-color: var(--dark_orange);
 }
 
-nav {
-  background-color: #eaeaea;
+header {
+  background-color: #fff;
   padding: 10px 14%;
   box-sizing: border-box;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -49,9 +50,27 @@ nav {
   top: 0;
 }
 
-.logo img {
+header button {
+  background-color: inherit;
+}
+
+header button:hover {
+  background-color: inherit;
+}
+
+header img {
   width: 120px;
   margin-top: 8px;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+nav button {
+  flex: 1;
 }
 
 #login {
@@ -117,6 +136,16 @@ nav {
   padding: 10px 20px;
 }
 
+#options nav button {
+  margin: 0 6px;
+}
+
+#options .disabled-button {
+  opacity: 0.5;
+  background-color: var(--dark_blue);
+  cursor: default;
+}
+
 #options h2 {
   margin-top: 20px;
 }
@@ -153,9 +182,30 @@ nav {
 
 #game {
   display: none;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
 }
 
-#rules-popup {
+#game button {
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+}
+
+#game nav button {
+  margin: 0 6px;
+}
+
+#leaderboard-popup,
+#rules-popup,
+#settings-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -181,7 +231,9 @@ nav {
   display: inline;
 }
 
-#rules-popup-close {
+#leaderboard-popup-close,
+#rules-popup-close,
+#settings-popup-close {
   font-size: 24px;
   font-weight: bold;
   display: block;

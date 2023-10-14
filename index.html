@@ -9,11 +9,13 @@
   </head>
 
   <body>
-    <nav>
-      <div class="logo">
-        <img src="assets/logo_dara.png" alt="Logo" />
+    <header>
+      <div>
+        <button id="logo-button">
+          <img src="assets/logo_dara.png" alt="Logo" />
+        </button>
       </div>
-    </nav>
+    </header>
 
     <section id="login">
       <h2>Welcome</h2>
@@ -27,9 +29,13 @@
     </section>
 
     <section id="options">
-      <button class="home-screen-button">Home</button>
-      <button class="leaderboard-button">Leaderboard</button>
-      <button class="rules-button">Rules</button>
+      <nav>
+        <button class="home-screen-button">Home</button>
+        <button class="disabled-button">Options</button>
+        <button class="leaderboard-button">Leaderboard</button>
+        <button class="rules-button">Rules</button>
+        <button class="settings-button">Settings</button>
+      </nav>
 
       <h2>Options</h2>
 
@@ -61,8 +67,8 @@
 
       <label for="first-to-play">First to Play:</label>
       <select id="first-to-play">
-        <option value="player1">Player 1</option>
-        <option value="player2">Player 2</option>
+        <option value="orange">Orange</option>
+        <option value="blue">Blue</option>
         <option value="random">Random</option>
       </select>
 
@@ -71,10 +77,16 @@
     </section>
 
     <section id="game">
-      <button class="home-screen-button">Home</button>
-      <button class="leaderboard-button">Leaderboard</button>
-      <button class="rules-button">Rules</button>
+      <nav>
+        <button class="home-screen-button">Home</button>
+        <button class="options-button">Options</button>
+        <button class="leaderboard-button">Leaderboard</button>
+        <button class="rules-button">Rules</button>
+        <button class="settings-button">Settings</button>
+      </nav>
+
       <h2>Game</h2>
+
       <div id="board">
         <!-- The board and pieces will be dynamically generated based on the game state -->
       </div>
@@ -82,6 +94,20 @@
         <!-- Display the pieces that have not yet been played -->
       </div>
     </section>
+
+    <div id="leaderboard-popup">
+      <div class="popup-content">
+        <span id="leaderboard-popup-close"> &times; </span>
+        <h2 class="popup-title">Leaderboard</h2>
+      </div>
+    </div>
+
+    <div id="settings-popup">
+      <div class="popup-content">
+        <span id="settings-popup-close"> &times; </span>
+        <h2 class="popup-title">Settings</h2>
+      </div>
+    </div>
 
     <div id="rules-popup">
       <div class="popup-content">
