@@ -1,3 +1,10 @@
+:root {
+  --blue: #4c78aa;
+  --dark_blue: #2c588a;
+  --orange: #eb7531;
+  --dark_orange: #cb5711;
+}
+
 body {
   font-family: "Montserrat", "Roboto", sans-serif;
   font-size: 16px;
@@ -6,9 +13,9 @@ body {
   align-items: center;
   height: 100vh;
   background-color: #fafafa;
-  padding: 20px;
   max-width: 1200px;
   margin: 0 auto;
+  padding: 0;
 }
 
 #login {
@@ -45,7 +52,7 @@ body {
   padding: 10px;
   margin-bottom: 10px;
   border: none;
-  background-color: #4caf50;
+  background-color: var(--blue);
   color: white;
   text-align: center;
   text-decoration: none;
@@ -55,11 +62,11 @@ body {
 }
 
 #login button:hover {
-  background-color: #45a049;
+  background-color: var(--orange);
 }
 
 #login button:active {
-  background-color: #367736;
+  background-color: var(--dark_orange);
 }
 
 #login-error-message {
@@ -72,6 +79,74 @@ body {
 }
 
 #options {
+  display: none;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  margin-top: 20px;
+}
+
+#options button {
+  margin-top: 20px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: var(--blue);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+#options button:hover {
+  background-color: var(--orange);
+}
+#options button:active {
+  background-color: var(--dark_orange);
+}
+
+#options h2 {
+  margin-top: 20px;
+}
+
+#options label {
+  display: block;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#options select {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+#options #piece-image {
+  width: 50px;
+  height: auto;
+}
+
+#options #piece-toggle-button {
+  background-color: white;
+  border-width: 2;
+  border-style: solid;
+  padding: 0;
+  background: none;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: border-color 0.3s ease;
+}
+
+#options #difficulty-div {
   display: none;
 }
 

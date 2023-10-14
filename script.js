@@ -1,13 +1,20 @@
-let username = "guest";
+let username = "";
 let boardSize = "";
+let piece = "";
 let opponent = "";
 let difficulty = "";
 let firstToPlay = "";
 
 function handleLogin() {
-  username = document.getElementById("username").value;
+  // Hide Login and display Options
   document.getElementById("login").style.display = "none";
   document.getElementById("options").style.display = "block";
+
+  // Assign values to the variables
+  username = document.getElementById("username").value;
+  if (!username) {
+    username = "guest";
+  }
 }
 
 function displayLoginErrorMessage() {
@@ -20,6 +27,45 @@ function goToHome() {
   document.getElementById("game").style.display = "none";
   document.getElementById("login").style.display = "block";
   document.getElementById("login-error-message").style.display = "none";
+}
+
+function togglePieceImage() {
+  const pieceImage = document.getElementById("piece-image");
+
+  if (!piece) {
+    piece = "assets/orange_piece.jpeg";
+  }
+
+  if (piece === "assets/orange_piece.jpeg") {
+    piece = "assets/blue_piece.jpeg";
+    pieceImage.src = "assets/blue_piece.jpeg";
+  } else {
+    piece = "assets/orange_piece.jpeg";
+    pieceImage.src = "assets/orange_piece.jpeg";
+  }
+}
+
+function toggleDifficultyDiv() {
+  const opponentSelect = document.getElementById("opponent");
+  const difficultyDiv = document.getElementById("difficulty-div");
+
+  if (opponentSelect.value === "computer") {
+    difficultyDiv.style.display = "block";
+  } else {
+    difficultyDiv.style.display = "none";
+  }
+}
+function resetOptions() {
+  // Reset Piece Color
+  if (piece === "assets/blue_piece.jpeg") {
+    togglePieceImage();
+  }
+  // Reset all selects to the first option
+  document.getElementById("board-size").selectedIndex = 0;
+  document.getElementById("opponent").selectedIndex = 0;
+  document.getElementById("difficulty").selectedIndex = 0;
+  document.getElementById("first-to-play").selectedIndex = 0;
+  toggleDifficultyDiv();
 }
 
 function startGame() {
@@ -131,6 +177,12 @@ document
   .getElementById("play-as-guest-button")
   .addEventListener("click", handleLogin);
 document
+  .getElementById("piece-toggle-button")
+  .addEventListener("click", togglePieceImage);
+document
+  .getElementById("reset-to-default-button")
+  .addEventListener("click", resetOptions);
+document
   .getElementById("start-game-button")
   .addEventListener("click", startGame);
 for (const button of document.getElementsByClassName("home-screen-button")) {
@@ -142,3 +194,8 @@ for (const button of document.getElementsByClassName("leaderboard-button")) {
 for (const button of document.getElementsByClassName("rules-button")) {
   button.addEventListener("click", showRules);
 }
+
+// Add an event listener to the opponent dropdown
+document
+  .getElementById("opponent")
+  .addEventListener("change", toggleDifficultyDiv);

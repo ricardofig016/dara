@@ -25,24 +25,32 @@
       <button class="rules-button">Rules</button>
 
       <h2>Options</h2>
+
       <label for="board-size">Board Size:</label>
       <select id="board-size">
         <option value="5x6">5x6</option>
         <option value="6x6">6x6</option>
       </select>
 
+      <label for="piece-toggle-button">Piece Color:</label>
+      <button id="piece-toggle-button">
+        <img id="piece-image" src="assets/orange_piece.jpeg" alt="Piece" />
+      </button>
+
       <label for="opponent">Play Against:</label>
       <select id="opponent">
-        <option value="computer">Computer</option>
         <option value="friend">Friend</option>
+        <option value="computer">Computer</option>
       </select>
 
-      <label for="difficulty">Difficulty:</label>
-      <select id="difficulty">
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </select>
+      <div id="difficulty-div">
+        <label for="difficulty">Difficulty:</label>
+        <select id="difficulty">
+          <option value="easy">Easy</option>
+          <option value="medium">Medium</option>
+          <option value="hard">Hard</option>
+        </select>
+      </div>
 
       <label for="first-to-play">First to Play:</label>
       <select id="first-to-play">
@@ -51,9 +59,8 @@
         <option value="random">Random</option>
       </select>
 
+      <button id="reset-to-default-button">Reset to Default</button>
       <button id="start-game-button">Start Game</button>
-      <button id="pieces-button">Pieces</button>
-      <button id="default-button">Reset to default</button>
     </section>
 
     <section id="game">
