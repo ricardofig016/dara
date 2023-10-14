@@ -44,59 +44,51 @@ function startGame() {
   });
 }
 
-function showInstructions() {
+function showRules() {
   // Variable to keep track of the current section
   let currentSection = 1;
 
-  // Create a pop-up element
-  const popup = document.createElement("div");
-  popup.className = "popup";
+  // Change display of popup element
+  document.getElementById("rules-popup").style.display = "flex";
 
-  // Create the content for the pop-up
-  const content = document.createElement("div");
-  content.className = "popup-content";
+  // Get "Previous" and "Next" buttons
+  const closeButton = document.getElementById("rules-popup-close");
+  const prevButton = document.getElementById("rules-prev-button");
+  const nextButton = document.getElementById("rules-next-button");
+  const rules = document.getElementById("rules");
 
-  // Create a title header
-  const title = document.createElement("h2");
-  title.className = "popup-title";
-  title.innerText = "Instruções";
-
-  // Create a close button
-  const closeButton = document.createElement("span");
-  closeButton.className = "popup-close";
-  closeButton.innerHTML = "&times;";
-
-  // Create a paragraph element
-  const instructions = document.createElement("p");
-
-  // Load instructions from file
+  // Load rules from file
   let sections;
-  fetch("instructions.txt")
+  fetch("rules.txt")
     .then((response) => response.text())
     .then((text) => {
       // Split the text into sections based on "[Section x]"
       sections = text.split(/\[Section \d+\]/);
       // Display the first section
-      instructions.innerHTML = sections[currentSection].trim();
+      rules.innerHTML = sections[currentSection].trim();
     })
     .catch((error) => {
-      console.error("Failed to fetch instructions:", error);
-      instructions.innerText = "Failed to fetch instructions.";
+      console.error("Failed to fetch rules:", error);
+      rules.innerText = "Failed to fetch rules.";
     });
 
-  // Create "Previous" and "Next" buttons
-  const prevButton = document.createElement("button");
-  prevButton.className = "prevButton";
-  prevButton.innerHTML = "&lt;";
-  const nextButton = document.createElement("button");
-  nextButton.className = "nextButton";
-  nextButton.innerHTML = "&gt;";
+  // Add an event listener to close the pop-up when the close button is clicked
+  closeButton.addEventListener("click", () => {
+    document.getElementById("rules-popup").style.display = "none";
+  });
+
+  // Add an event listener to close the pop-up when ESCAPE is pressed
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      document.getElementById("rules-popup").style.display = "none";
+    }
+  });
 
   // Event listener for "Previous" button
   prevButton.addEventListener("click", () => {
     if (currentSection > 1) {
       currentSection--;
-      instructions.innerHTML = sections[currentSection].trim();
+      rules.innerHTML = sections[currentSection].trim();
     }
   });
 
@@ -104,30 +96,7 @@ function showInstructions() {
   nextButton.addEventListener("click", () => {
     if (currentSection < sections.length - 1) {
       currentSection++;
-      instructions.innerHTML = sections[currentSection].trim();
-    }
-  });
-
-  // Append elements to the pop-up
-  content.appendChild(closeButton);
-  content.appendChild(title);
-  content.appendChild(instructions);
-  content.appendChild(prevButton);
-  content.appendChild(nextButton);
-  popup.appendChild(content);
-
-  // Append the pop-up to the body
-  document.body.appendChild(popup);
-
-  // Add an event listener to close the pop-up when the close button is clicked
-  closeButton.addEventListener("click", () => {
-    document.body.removeChild(popup);
-  });
-
-  // Add an event listener to close the pop-up when ESCAPE is pressed
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      document.body.removeChild(popup);
+      rules.innerHTML = sections[currentSection].trim();
     }
   });
 
@@ -135,7 +104,7 @@ function showInstructions() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "ArrowLeft" && sections && currentSection > 1) {
       currentSection--;
-      instructions.innerHTML = sections[currentSection].trim();
+      rules.innerHTML = sections[currentSection].trim();
     }
   });
 
@@ -147,7 +116,7 @@ function showInstructions() {
       currentSection < sections.length - 1
     ) {
       currentSection++;
-      instructions.innerHTML = sections[currentSection].trim();
+      rules.innerHTML = sections[currentSection].trim();
     }
   });
 }
@@ -164,12 +133,12 @@ document
 document
   .getElementById("start-game-button")
   .addEventListener("click", startGame);
-document
-  .getElementById("home-screen-button")
-  .addEventListener("click", goToHome);
-document
-  .getElementById("instructions-button")
-  .addEventListener("click", showInstructions);
-document
-  .getElementById("leaderboard-button")
-  .addEventListener("click", showLeaderboard);
+for (const button of document.getElementsByClassName("home-screen-button")) {
+  button.addEventListener("click", goToHome);
+}
+for (const button of document.getElementsByClassName("leaderboard-button")) {
+  button.addEventListener("click", showLeaderboard);
+}
+for (const button of document.getElementsByClassName("rules-button")) {
+  button.addEventListener("click", showRules);
+}

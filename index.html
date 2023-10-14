@@ -20,6 +20,10 @@
     </section>
 
     <section id="options">
+      <button class="home-screen-button">Home</button>
+      <button class="leaderboard-button">Leaderboard</button>
+      <button class="rules-button">Rules</button>
+
       <h2>Options</h2>
       <label for="board-size">Board Size:</label>
       <select id="board-size">
@@ -48,9 +52,14 @@
       </select>
 
       <button id="start-game-button">Start Game</button>
+      <button id="pieces-button">Pieces</button>
+      <button id="default-button">Reset to default</button>
     </section>
 
     <section id="game">
+      <button class="home-screen-button">Home</button>
+      <button class="leaderboard-button">Leaderboard</button>
+      <button class="rules-button">Rules</button>
       <h2>Game</h2>
       <div id="board">
         <!-- The board and pieces will be dynamically generated based on the game state -->
@@ -58,10 +67,17 @@
       <div id="unplayed-pieces">
         <!-- Display the pieces that have not yet been played -->
       </div>
-      <button id="home-screen-button">Home Screen</button>
-      <button id="leaderboard-button">Leaderboard</button>
-      <button id="instructions-button">Instructions</button>
     </section>
+
+    <div id="rules-popup">
+      <div class="popup-content">
+        <span id="rules-popup-close"> &times; </span>
+        <h2 class="popup-title">Rules</h2>
+        <p id="rules"></p>
+        <button id="rules-prev-button">&lt;</button>
+        <button id="rules-next-button">&gt;</button>
+      </div>
+    </div>
 
     <script src="script.js"></script>
   </body>
