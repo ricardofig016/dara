@@ -1,9 +1,14 @@
+import Game from "./game.js";
+
 let username = "";
 let boardSize = "";
 let piece = "";
 let opponent = "";
 let difficulty = "";
 let firstToPlay = "";
+
+const orangePiecePath = "assets/orange_piece.png";
+const bluePiecePath = "assets/blue_piece.png";
 
 function handleLogin(isGuest) {
   // Hide Login and display Options
@@ -37,8 +42,11 @@ function goToHome() {
 }
 
 function goToOptions() {
+  // Hide other sections
   document.getElementById("login").style.display = "none";
   document.getElementById("game").style.display = "none";
+
+  // Display options section
   document.getElementById("options").style.display = "block";
   resetOptions();
 }
@@ -47,15 +55,15 @@ function togglePieceImage() {
   const pieceImage = document.getElementById("piece-image");
 
   if (!piece) {
-    piece = "assets/orange_piece.png";
+    piece = orangePiecePath;
   }
 
-  if (piece === "assets/orange_piece.png") {
-    piece = "assets/blue_piece.png";
-    pieceImage.src = "assets/blue_piece.png";
+  if (piece === orangePiecePath) {
+    piece = bluePiecePath;
+    pieceImage.src = bluePiecePath;
   } else {
-    piece = "assets/orange_piece.png";
-    pieceImage.src = "assets/orange_piece.png";
+    piece = orangePiecePath;
+    pieceImage.src = orangePiecePath;
   }
 }
 
@@ -69,9 +77,10 @@ function toggleDifficultyDiv() {
     difficultyDiv.style.display = "none";
   }
 }
+
 function resetOptions() {
   // Reset Piece Color
-  if (piece === "assets/blue_piece.png") {
+  if (piece === bluePiecePath) {
     togglePieceImage();
   }
   // Reset all selects to the first option
@@ -93,8 +102,15 @@ function startGame() {
   document.getElementById("options").style.display = "none";
   document.getElementById("game").style.display = "block";
 
-  // Initialize and start the game logic here based on selected options
-  // ...
+  const game = new Game(boardSize, opponent, difficulty, firstToPlay);
+
+  // Example for testing
+  game.insertPiece(0, 0, "orange"); // Inserting an orange piece at (0, 0)
+  game.movePiece(0, 0, 1, 0); // Moving the piece from (0, 0) to (1, 0)
+  game.insertPiece(0, 0, "blue"); // Inserting a blue piece at (0, 0)
+  //game.removePiece(1, 0); // Removing the piece at (1, 0)
+
+  createGameElements(game);
 
   // Log options to the console
   console.log("Selected options: ", {
@@ -105,6 +121,53 @@ function startGame() {
     difficulty,
     firstToPlay,
   });
+}
+
+function createGameElements(game) {
+  // Get board element
+  const boardDiv = document.getElementById("board");
+  const boardStyles = window.getComputedStyle(boardDiv);
+  const boardMaxWidth = boardStyles.getPropertyValue("max-width");
+
+  // Compute correct cell size
+  const cellSize = parseInt(boardMaxWidth) / game.cols - 6;
+
+  // Clear previous content
+  boardDiv.innerHTML = "";
+
+  // Iterate through all cells
+  for (let row = 0; row < game.rows; row++) {
+    for (let col = 0; col < game.cols; col++) {
+      const cell = document.createElement("button");
+      cell.classList.add("cell");
+      cell.dataset.row = row;
+      cell.dataset.col = col;
+      cell.style.width = cellSize + "px";
+      cell.style.height = cellSize + "px";
+
+      // Change background-color of the cell based on parity
+      if ((row + col) % 2 === 0) {
+        cell.style.backgroundColor = "#fafafa";
+      } else {
+        cell.style.backgroundColor = "#cacaca";
+      }
+
+      // Add piece if exists
+      if (game.board[row][col]) {
+        const piece = document.createElement("img");
+        piece.classList.add("piece");
+        if (game.board[row][col].color === "orange") {
+          piece.src = orangePiecePath;
+        } else {
+          piece.src = bluePiecePath;
+        }
+        cell.appendChild(piece);
+      }
+
+      // Append cell to board div
+      boardDiv.appendChild(cell);
+    }
+  }
 }
 
 // ---------------------- NOT COMPLETED ----------------------
@@ -261,7 +324,7 @@ for (const button of document.getElementsByClassName("settings-button")) {
   button.addEventListener("click", showSettings);
 }
 
-// Add an event listener to the opponent dropdown
+// Event listener for the opponent dropdown
 document
   .getElementById("opponent")
   .addEventListener("change", toggleDifficultyDiv);

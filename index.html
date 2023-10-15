@@ -41,8 +41,8 @@
 
       <label for="board-size">Board Size:</label>
       <select id="board-size">
-        <option value="5x6">5x6</option>
-        <option value="6x6">6x6</option>
+        <option value="6x5">6 x 5</option>
+        <option value="6x6">6 x 6</option>
       </select>
 
       <label for="piece-toggle-button">Piece Color:</label>
@@ -88,10 +88,7 @@
       <h2>Game</h2>
 
       <div id="board">
-        <!-- The board and pieces will be dynamically generated based on the game state -->
-      </div>
-      <div id="unplayed-pieces">
-        <!-- Display the pieces that have not yet been played -->
+        <!-- Game elements are added here using javascript -->
       </div>
     </section>
 
@@ -119,6 +116,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
   </body>
 </html>
