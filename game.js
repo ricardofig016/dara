@@ -15,13 +15,13 @@ class Game {
       () => Array(this.cols).fill(null) // Each cell can be empty, orange, or blue
     );
 
-    // Opponent, difficulty, turn
+    // Opponent, difficulty, turn, phase, prev_move
     this.opponent = "computer"; // IMPORTANT -> 1v1 not implemented yet
     this.difficulty = difficulty;
     this.turn = firstToPlay;
-
-    // Phase
     this.phase = "drop"; // Can be 'drop' or 'move'
+    this.orange_prev_move = null; // [oldRow, oldCol, newRow, newCol]
+    this.blue_prev_move = null; // [oldRow, oldCol, newRow, newCol]
   }
 
   dropPiece(row, col, color) {
@@ -33,14 +33,16 @@ class Game {
   }
 
   movePiece(oldRow, oldCol, newRow, newCol) {
-    if (
-      this.isValidCell(oldRow, oldCol) &&
-      this.isValidCell(newRow, newCol) &&
-      this.board[oldRow][oldCol] &&
-      !this.board[newRow][newCol] &&
-      Math.abs(oldRow - newRow) === 1 &&
-      Math.abs(oldCol - newCol) === 1
-    ) {
+    if (this.isValidMove(oldRow, oldCol, newRow, newCol)) {
+      // Store new previous move
+      let color = this.board[oldRow][oldCol];
+      if (color === "orange") {
+        this.orange_prev_move = [oldRow, oldCol, newRow, newCol];
+      } else {
+        this.blue_prev_move = [oldRow, oldCol, newRow, newCol];
+      }
+
+      // Make move
       this.board[newRow][newCol] = this.board[oldRow][oldCol];
       this.board[oldRow][oldCol] = null;
       return true;
@@ -95,17 +97,28 @@ class Game {
     return true;
   }
 
-  // IMPORTANT -> Missing logic for when the piece moves back to the same cell on the next move
   isValidMove(oldRow, oldCol, newRow, newCol) {
     if (
       !this.isValidCell(oldRow, oldCol) ||
       !this.isValidCell(newRow, newCol) ||
       !this.board[oldRow][oldCol] ||
       this.board[newRow][newCol] ||
-      Math.abs(oldRow - newRow) != 1 ||
-      Math.abs(oldCol - newCol) != 1
+      Math.abs(oldRow - newRow) + Math.abs(oldCol - newCol) != 1
     ) {
       return false;
+    }
+
+    let color = this.board[oldRow][oldCol];
+
+    // Check if the piece is repeating previous move
+    if (color === "orange") {
+      if (this.orange_prev_move == [newRow, newCol, oldRow, oldCol]) {
+        return false;
+      }
+    } else {
+      if (this.blue_prev_move == [newRow, newCol, oldRow, oldCol]) {
+        return false;
+      }
     }
 
     // Check horizontally
