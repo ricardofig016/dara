@@ -197,7 +197,7 @@ function handleClickCell(game, cell) {
     revertBackgroundColor();
   } else if (cell.dataset.selected === "false") {
     cell.dataset.selected = "true";
-    cell.style.backgroundColor = "#12F54C";
+    cell.style.backgroundColor = "#00c04b";
   }
 }
 
