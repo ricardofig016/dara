@@ -158,8 +158,10 @@ function createGameElements(game) {
         piece.classList.add("piece");
         if (game.board[row][col].color === "orange") {
           piece.src = orangePiecePath;
+          piece.alt = "orange";
         } else {
           piece.src = bluePiecePath;
+          piece.alt = "blue";
         }
         cell.appendChild(piece);
       }
