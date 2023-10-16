@@ -10,14 +10,18 @@ class Game {
     }
 
     // Board
-    this.board = Array.from({ length: this.rows }, () =>
-      Array(this.cols).fill(null)
+    this.board = Array.from(
+      { length: this.rows },
+      () => Array(this.cols).fill(null) // Each cell can be empty, orange, or blue
     );
 
     // Opponent, difficulty, turn
     this.opponent = "computer"; // IMPORTANT -> 1v1 not implemented yet
     this.difficulty = difficulty;
     this.turn = firstToPlay;
+
+    // Phase
+    this.phase = "drop"; // Can be 'drop' or 'move'
   }
 
   insertPiece(row, col, color) {
@@ -32,8 +36,10 @@ class Game {
     if (
       this.isValidCell(oldRow, oldCol) &&
       this.isValidCell(newRow, newCol) &&
-      this.board[oldRow][oldCol] &&
-      !this.board[newRow][newCol]
+      this.board[oldRow][oldCol] && // There's a piece on this cell
+      !this.board[newRow][newCol] && // There's no piece on this cell
+      Math.abs(oldRow - newRow) === 1 && //Target is 1 row away
+      Math.abs(oldCol - newCol) === 1 //Target is 1 col away
     ) {
       this.board[newRow][newCol] = this.board[oldRow][oldCol];
       this.board[oldRow][oldCol] = null;
