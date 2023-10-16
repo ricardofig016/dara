@@ -121,6 +121,13 @@ function startGame() {
     difficulty,
     firstToPlay,
   });
+
+  // Add event listeners for each cell
+  for (const cell of document.getElementsByClassName("cell")) {
+    cell.addEventListener("click", () => {
+      handleClickCell(game, cell);
+    });
+  }
 }
 
 function createGameElements(game) {
@@ -142,11 +149,12 @@ function createGameElements(game) {
       cell.classList.add("cell");
       cell.dataset.row = row;
       cell.dataset.col = col;
+      cell.dataset.selected = "false";
       cell.style.width = cellSize + "px";
       cell.style.height = cellSize + "px";
 
       // Change background-color of the cell based on parity
-      if ((row + col) % 2 === 0) {
+      if ((row + col) % 2 == 0) {
         cell.style.backgroundColor = "#fafafa";
       } else {
         cell.style.backgroundColor = "#cacaca";
@@ -169,6 +177,27 @@ function createGameElements(game) {
       // Append cell to board div
       boardDiv.appendChild(cell);
     }
+  }
+}
+
+function handleClickCell(game, cell) {
+  function revertBackgroundColor() {
+    let row = parseInt(cell.dataset.row);
+    let col = parseInt(cell.dataset.col);
+    if ((row + col) % 2 === 0) {
+      cell.style.backgroundColor = "#fafafa";
+    } else {
+      cell.style.backgroundColor = "#cacaca";
+    }
+  }
+
+  // Change background color of cell is its selected
+  if (cell.dataset.selected === "true") {
+    cell.dataset.selected = "false";
+    revertBackgroundColor();
+  } else if (cell.dataset.selected === "false") {
+    cell.dataset.selected = "true";
+    cell.style.backgroundColor = "#12F54C";
   }
 }
 
