@@ -24,8 +24,8 @@ class Game {
     this.phase = "drop"; // Can be 'drop' or 'move'
   }
 
-  insertPiece(row, col, color) {
-    if (this.isValidCell(row, col) && !this.board[row][col]) {
+  dropPiece(row, col, color) {
+    if (this.isValidDrop(row, col, color)) {
       this.board[row][col] = { color };
       return true;
     }
@@ -36,10 +36,10 @@ class Game {
     if (
       this.isValidCell(oldRow, oldCol) &&
       this.isValidCell(newRow, newCol) &&
-      this.board[oldRow][oldCol] && // There's a piece on this cell
-      !this.board[newRow][newCol] && // There's no piece on this cell
-      Math.abs(oldRow - newRow) === 1 && //Target is 1 row away
-      Math.abs(oldCol - newCol) === 1 //Target is 1 col away
+      this.board[oldRow][oldCol] &&
+      !this.board[newRow][newCol] &&
+      Math.abs(oldRow - newRow) === 1 &&
+      Math.abs(oldCol - newCol) === 1
     ) {
       this.board[newRow][newCol] = this.board[oldRow][oldCol];
       this.board[oldRow][oldCol] = null;
@@ -59,6 +59,89 @@ class Game {
   // Check if a cell exists on the board
   isValidCell(row, col) {
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
+  }
+
+  isValidDrop(row, col, color) {
+    // The cell doesn't exist or is already occupied
+    if (!this.isValidCell(row, col) || this.board[row][col]) {
+      return false;
+    }
+
+    // Check horizontally
+    let horizontalCount = 1;
+    for (let i = col - 1; i >= 0 && this.board[row][i] === color; i--) {
+      horizontalCount++;
+    }
+    for (let i = col + 1; i < this.cols && this.board[row][i] === color; i++) {
+      horizontalCount++;
+    }
+    if (horizontalCount >= 4) {
+      return false; // 4-in-line horizontally
+    }
+
+    // Check vertically
+    let verticalCount = 1;
+    for (let i = row - 1; i >= 0 && this.board[i][col] === color; i--) {
+      verticalCount++;
+    }
+    for (let i = row + 1; i < this.rows && this.board[i][col] === color; i++) {
+      verticalCount++;
+    }
+    if (verticalCount >= 4) {
+      return false; // 4-in-line vertically
+    }
+
+    // The drop is valid
+    return true;
+  }
+
+  // IMPORTANT -> Missing logic for when the piece moves back to the same cell on the next move
+  isValidMove(oldRow, oldCol, newRow, newCol) {
+    if (
+      !this.isValidCell(oldRow, oldCol) ||
+      !this.isValidCell(newRow, newCol) ||
+      !this.board[oldRow][oldCol] ||
+      this.board[newRow][newCol] ||
+      Math.abs(oldRow - newRow) != 1 ||
+      Math.abs(oldCol - newCol) != 1
+    ) {
+      return false;
+    }
+
+    // Check horizontally
+    let horizontalCount = 1;
+    for (let i = newCol - 1; i >= 0 && this.board[newRow][i] === color; i--) {
+      horizontalCount++;
+    }
+    for (
+      let i = newCol + 1;
+      i < this.cols && this.board[newRow][i] === color;
+      i++
+    ) {
+      horizontalCount++;
+    }
+    if (horizontalCount >= 4) {
+      return false; // 4-in-line horizontally
+    }
+
+    // Check vertically
+    let verticalCount = 1;
+    for (let i = newRow - 1; i >= 0 && this.board[i][newCol] === color; i--) {
+      verticalCount++;
+    }
+    for (
+      let i = newRow + 1;
+      i < this.rows && this.board[i][newCol] === color;
+      i++
+    ) {
+      verticalCount++;
+    }
+    if (verticalCount >= 4) {
+      return false; // 4-in-line vertically
+    }
+
+    // The move is valid
+    return true;
   }
 }
 
