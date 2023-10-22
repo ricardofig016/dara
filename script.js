@@ -107,7 +107,7 @@ function startGame() {
   // Example for testing
   game.dropPiece(0, 0, "orange"); // Inserting an orange piece at (0, 0)
   game.movePiece(0, 0, 1, 0); // Moving the piece from (0, 0) to (1, 0)
-  game.dropPiece(0, 0, "blue"); // Inserting a blue piece at (0, 0)
+  game.dropPiece(2, 2, "blue"); // Inserting a blue piece at (0, 0)
   //game.removePiece(1, 0); // Removing the piece at (1, 0)
 
   createGameElements(game);
