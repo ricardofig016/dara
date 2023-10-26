@@ -32,6 +32,15 @@ class Game {
     return false;
   }
 
+  canMove(row, col, color) {
+    if (this.isValidCell(row, col)) {
+      if (this.turn === color) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   movePiece(oldRow, oldCol, newRow, newCol) {
     if (this.isValidMove(oldRow, oldCol, newRow, newCol)) {
       // Store new previous move

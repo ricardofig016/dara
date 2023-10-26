@@ -180,24 +180,94 @@ function createGameElements(game) {
   }
 }
 
+// Revert cell background color back to original
+function revertCellColor(cell) {
+  let row = parseInt(cell.dataset.row);
+  let col = parseInt(cell.dataset.col);
+  if ((row + col) % 2 === 0) {
+    cell.style.backgroundColor = "#fafafa";
+  } else {
+    cell.style.backgroundColor = "#cacaca";
+  }
+}
+
+// Change background color of cell is its selected
+function colorValidCell(cell) {
+  cell.style.backgroundColor = "#73df3b";
+}
+
+// Make the piece appear bigger if selected
+function highlightSelectedCell(cell) {
+  let piece_img = cell.querySelector(".piece");
+  if (cell.dataset.selected === "true") {
+    piece_img.style.transform = "scale(1.3)";
+  } else {
+    piece_img.style.transform = "scale(1)";
+  }
+}
+
 function handleClickCell(game, cell) {
-  function revertBackgroundColor() {
-    let row = parseInt(cell.dataset.row);
-    let col = parseInt(cell.dataset.col);
-    if ((row + col) % 2 === 0) {
-      cell.style.backgroundColor = "#fafafa";
-    } else {
-      cell.style.backgroundColor = "#cacaca";
+  function revertAllCells() {
+    revertCellColors();
+    revertSelectedCells();
+  }
+
+  function revertSelectedCells() {
+    for (let row = 0; row < game.rows; row++) {
+      for (let col = 0; col < game.cols; col++) {
+        const curr_cell = document.querySelector(
+          `[data-row="${row}"][data-col="${col}"]`
+        );
+        curr_cell.dataset.selected = "false";
+        if (curr_cell.querySelector(".piece")) {
+          highlightSelectedCell(curr_cell);
+        }
+      }
     }
   }
 
-  // Change background color of cell is its selected
-  if (cell.dataset.selected === "true") {
-    cell.dataset.selected = "false";
-    revertBackgroundColor();
-  } else if (cell.dataset.selected === "false") {
-    cell.dataset.selected = "true";
-    cell.style.backgroundColor = "#00c04b";
+  function revertCellColors() {
+    for (let row = 0; row < game.rows; row++) {
+      for (let col = 0; col < game.cols; col++) {
+        const curr_cell = document.querySelector(
+          `[data-row="${row}"][data-col="${col}"]`
+        );
+        revertCellColor(curr_cell);
+      }
+    }
+  }
+
+  function colorValidCells() {
+    for (let row = 0; row < game.rows; row++) {
+      for (let col = 0; col < game.cols; col++) {
+        const candidate_cell = document.querySelector(
+          `[data-row="${row}"][data-col="${col}"]`
+        );
+        if (game.isValidMove(cell.dataset.row, cell.dataset.col, row, col)) {
+          colorValidCell(candidate_cell);
+        }
+      }
+    }
+  }
+
+  revertAllCells();
+  let piece_img = cell.querySelector(".piece");
+  let color = "";
+  if (piece_img.src === orangePiecePath) {
+    color = "orange";
+  } else {
+    color = "blue";
+  }
+  console.log(color);
+  if (piece_img && game.canMove(cell.dataset.row, cell.dataset.col, color)) {
+    if (cell.dataset.selected === "true") {
+      cell.dataset.selected = "false";
+      revertCellColors();
+    } else {
+      cell.dataset.selected = "true";
+      colorValidCells();
+    }
+    highlightSelectedCell(cell);
   }
 }
 

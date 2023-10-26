@@ -228,7 +228,7 @@ nav button {
 #game .piece {
   width: 100%; /* Adjust the size of the piece */
   height: 100%; /* Adjust the size of the piece */
-  object-fit: cover; /* Make sure the piece covers the whole cell */
+  transition: transform 0.3s;
 }
 
 #leaderboard-popup,
