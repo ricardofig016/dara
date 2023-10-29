@@ -104,6 +104,30 @@ function startGame() {
 
   const game = new Game(boardSize, opponent, difficulty, firstToPlay);
 
+  game.dropPiece(0, 0, "blue");
+  game.dropPiece(0, 1, "orange");
+  game.dropPiece(0, 2, "blue");
+  game.dropPiece(0, 3, "orange");
+  game.dropPiece(0, 4, "blue");
+  game.dropPiece(1, 0, "orange");
+  game.dropPiece(1, 1, "blue");
+  game.dropPiece(1, 2, "orange");
+  game.dropPiece(1, 3, "blue");
+  game.dropPiece(1, 4, "orange");
+  game.dropPiece(2, 0, "blue");
+  game.dropPiece(2, 1, "orange");
+  game.dropPiece(2, 2, "blue");
+  game.dropPiece(2, 3, "orange");
+  game.dropPiece(2, 4, "blue");
+  game.dropPiece(3, 0, "orange");
+  game.dropPiece(3, 1, "blue");
+  game.dropPiece(3, 2, "orange");
+  game.dropPiece(3, 3, "blue");
+  game.dropPiece(3, 4, "orange");
+  game.dropPiece(4, 0, "blue");
+  game.dropPiece(4, 1, "orange");
+  game.dropPiece(4, 2, "blue");
+
   createGameElements(game);
 
   // Log options to the console
@@ -174,30 +198,9 @@ function createGameElements(game) {
   }
 }
 
-// Revert cell background color back to original
-function revertCellColor(cell) {
-  let row = parseInt(cell.dataset.row);
-  let col = parseInt(cell.dataset.col);
-  if ((row + col) % 2 === 0) {
-    cell.style.backgroundColor = "#fafafa";
-  } else {
-    cell.style.backgroundColor = "#cacaca";
-  }
-}
-
 // Change background color of cell is its selected
 function colorValidCell(cell) {
   cell.style.backgroundColor = "#73df3b";
-}
-
-// Make the piece appear bigger if selected
-function highlightSelectedCell(cell) {
-  let piece_img = cell.querySelector(".piece");
-  if (cell.dataset.selected === "true") {
-    piece_img.style.transform = "scale(1.3)";
-  } else {
-    piece_img.style.transform = "scale(1)";
-  }
 }
 
 function handleClickCell(game, cell) {
@@ -205,6 +208,8 @@ function handleClickCell(game, cell) {
     handleClickCellOnDropPhase(game, cell);
   } else if (game.phase === "move") {
     handleClickCellOnMovePhase(game, cell);
+  } else {
+    console.error("not a valid phase name");
   }
   return;
 }
@@ -213,12 +218,22 @@ function handleClickCellOnDropPhase(game, cell) {
   const row = cell.dataset.row;
   const col = cell.dataset.col;
 
+  // Drop piece
   if (game.dropPiece(row, col)) {
     console.log("piece dropped successfully");
     game.flipTurn();
+
+    // Recreate board
     createGameElements(game);
   } else {
     console.log("this drop is not valid");
+  }
+
+  // Advance to move phase
+  const orange_p = game.getPieces("orange");
+  const blue_p = game.getPieces("blue");
+  if (orange_p === blue_p && orange_p >= game.max_pieces) {
+    game.phase = "move";
   }
   return;
 }
@@ -227,6 +242,17 @@ function handleClickCellOnMovePhase(game, cell) {
   function revertAllCells() {
     revertCellColors();
     revertSelectedCells();
+  }
+
+  // Revert cell background color back to original
+  function revertCellColor(cell) {
+    let row = parseInt(cell.dataset.row);
+    let col = parseInt(cell.dataset.col);
+    if ((row + col) % 2 === 0) {
+      cell.style.backgroundColor = "#fafafa";
+    } else {
+      cell.style.backgroundColor = "#cacaca";
+    }
   }
 
   function revertSelectedCells() {
@@ -254,6 +280,16 @@ function handleClickCellOnMovePhase(game, cell) {
     }
   }
 
+  // Make the piece appear bigger if selected
+  function highlightSelectedCell(cell) {
+    let piece_img = cell.querySelector(".piece");
+    if (cell.dataset.selected === "true") {
+      piece_img.style.transform = "scale(1.3)";
+    } else {
+      piece_img.style.transform = "scale(1)";
+    }
+  }
+
   function colorValidCells() {
     for (let row = 0; row < game.rows; row++) {
       for (let col = 0; col < game.cols; col++) {
@@ -261,38 +297,101 @@ function handleClickCellOnMovePhase(game, cell) {
           `[data-row="${row}"][data-col="${col}"]`
         );
         if (game.isValidMove(cell.dataset.row, cell.dataset.col, row, col)) {
+          console.log(
+            [cell.dataset.row, cell.dataset.col, row, col],
+            "is a valid move"
+          );
           colorValidCell(candidate_cell);
         }
       }
     }
   }
 
-  let piece_img = cell.querySelector(".piece");
-  if (!piece_img) {
-    console.log("the cell is empty");
-    return;
-  }
-  let color = "";
-  if (piece_img.src.includes("orange")) {
-    color = "orange";
-  } else if (piece_img.src.includes("blue")) {
-    color = "blue";
-  } else {
-    console.error("invalid piece color");
+  function firstSelection() {
+    let piece_img = cell.querySelector(".piece");
+
+    // Tried to select an empty cell
+    if (!piece_img) {
+      console.log("the cell is empty");
+      return;
+    }
+
+    // Find color of the selected piece
+    let color = "";
+    if (piece_img.src.includes("orange")) {
+      color = "orange";
+    } else if (piece_img.src.includes("blue")) {
+      color = "blue";
+    } else {
+      console.error("invalid piece color");
+      return;
+    }
+
+    // Tried to select a piece on the other color's turn
+    if (color != game.turn) {
+      console.log("not your turn");
+    }
+
+    // Select the cell
+    if (game.canMove(cell.dataset.row, cell.dataset.col, color)) {
+      cell.dataset.selected = "true";
+      colorValidCells();
+      highlightSelectedCell(cell);
+    }
     return;
   }
 
-  if (game.canMove(cell.dataset.row, cell.dataset.col, color)) {
-    if (cell.dataset.selected === "true") {
-      cell.dataset.selected = "false";
-      revertCellColors();
-    } else {
-      revertAllCells();
-      cell.dataset.selected = "true";
-      colorValidCells();
+  function secondSelection() {
+    // Find selected cell
+    let selected_cell = null;
+    for (let row = 0; row < game.rows; row++) {
+      for (let col = 0; col < game.cols; col++) {
+        let candidate_cell = document.querySelector(
+          `[data-row="${row}"][data-col="${col}"]`
+        );
+        if (candidate_cell.dataset.selected === "true") {
+          selected_cell = candidate_cell;
+          break;
+        }
+      }
     }
-    highlightSelectedCell(cell);
+
+    if (!selected_cell) {
+      console.error("no cell is selected");
+      return;
+    }
+
+    // Move piece
+    if (
+      game.movePiece(
+        selected_cell.dataset.row,
+        selected_cell.dataset.col,
+        cell.dataset.row,
+        cell.dataset.col
+      )
+    ) {
+      console.log("piece moved successfully");
+      game.flipTurn();
+
+      // Recreate board
+      createGameElements(game);
+    }
+    revertAllCells();
+    return;
   }
+
+  for (let row = 0; row < game.rows; row++) {
+    for (let col = 0; col < game.cols; col++) {
+      const curr_cell = document.querySelector(
+        `[data-row="${row}"][data-col="${col}"]`
+      );
+      if (curr_cell.dataset.selected === "true") {
+        secondSelection();
+        return;
+      }
+    }
+  }
+  firstSelection();
   return;
 }
 

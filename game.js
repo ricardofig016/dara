@@ -52,6 +52,12 @@ export class Game {
   }
 
   movePiece(oldRow, oldCol, newRow, newCol) {
+    // Make sure rows and cols are numbers
+    oldRow = parseInt(oldRow);
+    oldCol = parseInt(oldCol);
+    newRow = parseInt(newRow);
+    newCol = parseInt(newCol);
+
     if (this.isValidMove(oldRow, oldCol, newRow, newCol)) {
       // Store new previous move
       let color = this.board[oldRow][oldCol];
@@ -70,6 +76,10 @@ export class Game {
   }
 
   removePiece(row, col) {
+    // Make sure row and col are numbers
+    row = parseInt(row);
+    col = parseInt(col);
+
     if (this.isValidCell(row, col) && this.board[row][col]) {
       this.board[row][col] = null;
       return true;
@@ -83,6 +93,10 @@ export class Game {
   }
 
   isValidDrop(row, col) {
+    // Make sure row and col are numbers
+    row = parseInt(row);
+    col = parseInt(col);
+
     // The cell doesn't exist or
     // is already occupied or
     // the player has no more pieces
@@ -93,10 +107,6 @@ export class Game {
     ) {
       return false;
     }
-
-    // Make sure row and col are numbers
-    row = parseInt(row);
-    col = parseInt(col);
 
     // Check horizontally
     let horizontalCount = 1;
@@ -148,6 +158,12 @@ export class Game {
   }
 
   isValidMove(oldRow, oldCol, newRow, newCol) {
+    // Make sure rows and cols are numbers
+    oldRow = parseInt(oldRow);
+    oldCol = parseInt(oldCol);
+    newRow = parseInt(newRow);
+    newCol = parseInt(newCol);
+
     if (
       !this.isValidCell(oldRow, oldCol) ||
       !this.isValidCell(newRow, newCol) ||
@@ -158,17 +174,25 @@ export class Game {
       return false;
     }
 
-    let color = this.board[oldRow][oldCol];
+    const color = this.board[oldRow][oldCol];
+
+    // Assign right previous move
+    let prev_m = null;
+    if (color === "orange") {
+      prev_m = this.orange_prev_move;
+    } else {
+      prev_m = this.blue_prev_move;
+    }
 
     // Check if the piece is repeating previous move
-    if (color === "orange") {
-      if (this.orange_prev_move == [newRow, newCol, oldRow, oldCol]) {
-        return false;
-      }
-    } else {
-      if (this.blue_prev_move == [newRow, newCol, oldRow, oldCol]) {
-        return false;
-      }
+    if (
+      prev_m &&
+      prev_m[0] === newRow &&
+      prev_m[1] === newCol &&
+      prev_m[2] === oldRow &&
+      prev_m[3] === oldCol
+    ) {
+      return false;
     }
 
     // Check horizontally
