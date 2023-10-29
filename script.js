@@ -106,8 +106,9 @@ function startGame() {
 
   // Example for testing
   game.dropPiece(0, 0, "orange"); // Inserting an orange piece at (0, 0)
+  game.dropPiece(4, 4, "orange"); // Inserting an orange piece at (4, 4)
   game.movePiece(0, 0, 1, 0); // Moving the piece from (0, 0) to (1, 0)
-  game.dropPiece(2, 2, "blue"); // Inserting a blue piece at (0, 0)
+  game.dropPiece(2, 2, "blue"); // Inserting a blue piece at (2, 2)
   //game.removePiece(1, 0); // Removing the piece at (1, 0)
 
   createGameElements(game);
@@ -121,13 +122,6 @@ function startGame() {
     difficulty,
     firstToPlay,
   });
-
-  // Add event listeners for each cell
-  for (const cell of document.getElementsByClassName("cell")) {
-    cell.addEventListener("click", () => {
-      handleClickCell(game, cell);
-    });
-  }
 }
 
 function createGameElements(game) {
@@ -164,7 +158,7 @@ function createGameElements(game) {
       if (game.board[row][col]) {
         const piece = document.createElement("img");
         piece.classList.add("piece");
-        if (game.board[row][col].color === "orange") {
+        if (game.board[row][col] === "orange") {
           piece.src = orangePiecePath;
           piece.alt = "orange";
         } else {
@@ -177,6 +171,13 @@ function createGameElements(game) {
       // Append cell to board div
       boardDiv.appendChild(cell);
     }
+  }
+
+  // Add event listeners for each cell
+  for (const cell of document.getElementsByClassName("cell")) {
+    cell.addEventListener("click", () => {
+      handleClickCell(game, cell);
+    });
   }
 }
 
@@ -207,6 +208,29 @@ function highlightSelectedCell(cell) {
 }
 
 function handleClickCell(game, cell) {
+  if (game.phase === "drop") {
+    handleClickCellOnDropPhase(game, cell);
+  } else if (game.phase === "move") {
+    handleClickCellOnMovePhase(game, cell);
+  }
+  return;
+}
+
+function handleClickCellOnDropPhase(game, cell) {
+  const row = cell.dataset.row;
+  const col = cell.dataset.col;
+
+  if (game.dropPiece(row, col)) {
+    console.log("piece dropped successfully");
+    game.flipTurn();
+    createGameElements(game);
+  } else {
+    console.log("this drop is not valid");
+  }
+  return;
+}
+
+function handleClickCellOnMovePhase(game, cell) {
   function revertAllCells() {
     revertCellColors();
     revertSelectedCells();
@@ -250,25 +274,33 @@ function handleClickCell(game, cell) {
     }
   }
 
-  revertAllCells();
   let piece_img = cell.querySelector(".piece");
-  let color = "";
-  if (piece_img.src === orangePiecePath) {
-    color = "orange";
-  } else {
-    color = "blue";
+  if (!piece_img) {
+    console.log("the cell is empty");
+    return;
   }
-  console.log(color);
-  if (piece_img && game.canMove(cell.dataset.row, cell.dataset.col, color)) {
+  let color = "";
+  if (piece_img.src.includes("orange")) {
+    color = "orange";
+  } else if (piece_img.src.includes("blue")) {
+    color = "blue";
+  } else {
+    console.error("invalid piece color");
+    return;
+  }
+
+  if (game.canMove(cell.dataset.row, cell.dataset.col, color)) {
     if (cell.dataset.selected === "true") {
       cell.dataset.selected = "false";
       revertCellColors();
     } else {
+      revertAllCells();
       cell.dataset.selected = "true";
       colorValidCells();
     }
     highlightSelectedCell(cell);
   }
+  return;
 }
 
 // ---------------------- NOT COMPLETED ----------------------
