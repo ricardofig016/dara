@@ -19,7 +19,7 @@ export class Game {
     this.opponent = "computer"; // IMPORTANT -> 1v1 not implemented yet
     this.difficulty = difficulty;
     this.turn = firstToPlay;
-    this.phase = "drop"; // Can be 'drop' or 'move'
+    this.phase = "drop"; // Can be 'drop', 'move' or 'take'
     this.orange_prev_move = null; // [oldRow, oldCol, newRow, newCol]
     this.blue_prev_move = null; // [oldRow, oldCol, newRow, newCol]
     this.max_pieces = 12; // Each player has a total of 12 pieces
@@ -35,6 +35,10 @@ export class Game {
   }
 
   dropPiece(row, col, color = this.turn) {
+    // Make sure row and col are numbers
+    row = parseInt(row);
+    col = parseInt(col);
+
     if (this.isValidDrop(row, col, color)) {
       this.board[row][col] = color;
       return true;
@@ -52,6 +56,13 @@ export class Game {
   }
 
   movePiece(oldRow, oldCol, newRow, newCol) {
+    /**
+     * returns:
+     *  0 , if it fails to move the piece
+     *  1 , if the move does not make a line
+     *  2 , if the move makes a line
+     */
+
     // Make sure rows and cols are numbers
     oldRow = parseInt(oldRow);
     oldCol = parseInt(oldCol);
@@ -70,17 +81,86 @@ export class Game {
       // Make move
       this.board[newRow][newCol] = this.board[oldRow][oldCol];
       this.board[oldRow][oldCol] = null;
-      return true;
+
+      // Check for 3-in-line
+      if (this.makesLine(newRow, newCol)) {
+        return 2;
+      } else {
+        return 1;
+      }
     }
-    return false;
+    return 0;
   }
 
-  removePiece(row, col) {
+  makesLine(row, col) {
     // Make sure row and col are numbers
     row = parseInt(row);
     col = parseInt(col);
 
-    if (this.isValidCell(row, col) && this.board[row][col]) {
+    // The cell doesnt exist or is empty
+    if (!this.isValidCell(row, col) || !this.board[row][col]) {
+      return false;
+    }
+
+    // Check horizontally
+    let horizontalCount = 1;
+    for (let i = col - 1; i >= 0 && this.board[row][i] === this.turn; i--) {
+      horizontalCount++;
+    }
+    for (
+      let i = col + 1;
+      i < this.cols && this.board[row][i] === this.turn;
+      i++
+    ) {
+      horizontalCount++;
+    }
+    if (horizontalCount >= 3) {
+      return true; // 3-in-line horizontally
+    }
+
+    // Check vertically
+    let verticalCount = 1;
+    for (let i = row - 1; i >= 0 && this.board[i][col] === this.turn; i--) {
+      verticalCount++;
+    }
+    for (
+      let i = row + 1;
+      i < this.rows && this.board[i][col] === this.turn;
+      i++
+    ) {
+      verticalCount++;
+    }
+    if (verticalCount >= 3) {
+      return true; // 3-in-line vertically
+    }
+
+    // There is no 3 in line
+    return false;
+  }
+
+  removePiece(row, col, turn = this.turn) {
+    // Make sure row and col are numbers
+    row = parseInt(row);
+    col = parseInt(col);
+
+    // Find piece color
+    let color = null;
+    if (turn === "orange") {
+      color = "blue";
+    } else if (turn === "blue") {
+      color = "orange";
+    } else {
+      return false;
+    }
+
+    // If is cell is valid and
+    // if cell is not empty and
+    // if cell is opposite of turn
+    if (
+      this.isValidCell(row, col) &&
+      this.board[row][col] &&
+      this.board[row][col] === color
+    ) {
       this.board[row][col] = null;
       return true;
     }
@@ -89,6 +169,9 @@ export class Game {
 
   // Check if a cell exists on the board
   isValidCell(row, col) {
+    // Make sure row and col are numbers
+    row = parseInt(row);
+    col = parseInt(col);
     return row >= 0 && row < this.rows && col >= 0 && col < this.cols;
   }
 
@@ -197,12 +280,20 @@ export class Game {
 
     // Check horizontally
     let horizontalCount = 1;
-    for (let i = newCol - 1; i >= 0 && this.board[newRow][i] === color; i--) {
+    for (
+      let i = newCol - 1;
+      i >= 0 &&
+      this.board[newRow][i] === color &&
+      !(newRow === oldRow && i === oldCol);
+      i--
+    ) {
       horizontalCount++;
     }
     for (
       let i = newCol + 1;
-      i < this.cols && this.board[newRow][i] === color;
+      i < this.cols &&
+      this.board[newRow][i] === color &&
+      !(newRow === oldRow && i === oldCol);
       i++
     ) {
       horizontalCount++;
@@ -213,12 +304,20 @@ export class Game {
 
     // Check vertically
     let verticalCount = 1;
-    for (let i = newRow - 1; i >= 0 && this.board[i][newCol] === color; i--) {
+    for (
+      let i = newRow - 1;
+      i >= 0 &&
+      this.board[i][newCol] === color &&
+      !(i === oldRow && newCol === oldCol);
+      i--
+    ) {
       verticalCount++;
     }
     for (
       let i = newRow + 1;
-      i < this.rows && this.board[i][newCol] === color;
+      i < this.rows &&
+      this.board[i][newCol] === color &&
+      !(i === oldRow && newCol === oldCol);
       i++
     ) {
       verticalCount++;
