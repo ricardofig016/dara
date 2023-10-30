@@ -176,11 +176,11 @@ function startGame() {
   const game = new Game(boardSize, opponent, difficulty, firstToPlay);
 
   // For testing
-  game.dropPiece(0, 0, "blue");
-  game.dropPiece(0, 1, "orange");
-  game.dropPiece(0, 2, "blue");
-  game.dropPiece(0, 3, "orange");
-  game.dropPiece(0, 4, "blue");
+  //game.dropPiece(0, 0, "blue");
+  //game.dropPiece(0, 1, "orange");
+  //game.dropPiece(0, 2, "blue");
+  //game.dropPiece(0, 3, "orange");
+  //game.dropPiece(0, 4, "blue");
   //game.dropPiece(1, 0, "orange");
   //game.dropPiece(1, 1, "blue");
   //game.dropPiece(1, 2, "orange");

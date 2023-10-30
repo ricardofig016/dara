@@ -22,7 +22,7 @@ export class Game {
     this.phase = "drop"; // Can be 'drop', 'move' or 'take'
     this.orange_prev_move = null; // [oldRow, oldCol, newRow, newCol]
     this.blue_prev_move = null; // [oldRow, oldCol, newRow, newCol]
-    this.max_pieces = 3; // Each player has a total of 12 pieces
+    this.max_pieces = 12; // Each player has a total of 12 pieces
   }
 
   flipTurn() {
