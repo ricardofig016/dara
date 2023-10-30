@@ -223,8 +223,8 @@ export class Game {
     ) {
       horizontalCount++;
     }
-    if (horizontalCount >= 3) {
-      return false; // 3-in-line horizontally
+    if (horizontalCount >= 4) {
+      return false; // 4-in-line horizontally
     }
 
     // Check vertically
@@ -239,8 +239,8 @@ export class Game {
     ) {
       verticalCount++;
     }
-    if (verticalCount >= 3) {
-      return false; // 3-in-line vertically
+    if (verticalCount >= 4) {
+      return false; // 4-in-line vertically
     }
 
     // The drop is valid
