@@ -2,10 +2,11 @@ import Game from "./game.js";
 
 let username = "";
 let boardSize = "";
-let piece = "";
+let piece = "assets/orange_piece.png";
 let opponent = "";
 let difficulty = "";
 let firstToPlay = "";
+let moves_played = 0;
 
 const orangePiecePath = "assets/orange_piece.png";
 const bluePiecePath = "assets/blue_piece.png";
@@ -91,6 +92,41 @@ function resetOptions() {
   toggleDifficultyDiv();
 }
 
+function fillGameInfoText() {
+  // Who plays first
+  if (piece.includes(firstToPlay)) {
+    document.getElementById("game-info-turn").textContent = username;
+  } else {
+    document.getElementById("game-info-turn").textContent = opponent;
+  }
+
+  // Phase
+  document.getElementById("game-info-phase").textContent = "drop";
+
+  // Piece Color
+  if (piece.includes("orange")) {
+    document.getElementById("game-info-color").textContent = "orange";
+  } else {
+    document.getElementById("game-info-color").textContent = "blue";
+  }
+
+  // Opponent
+  document.getElementById("game-info-opponent").textContent = opponent;
+
+  // Difficulty
+  document.getElementById("game-info-diff").textContent = difficulty;
+  if (opponent != "computer") {
+    document.getElementById("game-info-diff").parentElement.style.display =
+      "none";
+  } else {
+    document.getElementById("game-info-diff").parentElement.style.display =
+      "block";
+  }
+
+  // Moves played
+  document.getElementById("game-info-move").textContent = moves_played / 2;
+}
+
 function startGame() {
   // Get selected options
   boardSize = document.getElementById("board-size").value;
@@ -102,8 +138,13 @@ function startGame() {
   document.getElementById("options").style.display = "none";
   document.getElementById("game").style.display = "block";
 
+  // Update text of game-info-div
+  fillGameInfoText();
+
+  // Create Game object
   const game = new Game(boardSize, opponent, difficulty, firstToPlay);
 
+  // For testing
   game.dropPiece(0, 0, "blue");
   game.dropPiece(0, 1, "orange");
   game.dropPiece(0, 2, "blue");
