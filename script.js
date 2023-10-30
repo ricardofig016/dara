@@ -93,6 +93,9 @@ function resetOptions() {
 }
 
 function fillGameInfoText() {
+  // Reset moves played
+  moves_played = 0;
+
   // Turn
   updateGameInfoTurn();
 
@@ -120,7 +123,7 @@ function fillGameInfoText() {
   }
 
   // Moves played
-  document.getElementById("game-info-move").textContent = moves_played / 2;
+  updateGameInfoMove();
 }
 
 function updateGameInfoTurn() {
@@ -147,7 +150,11 @@ function updateGameInfoPhase(phase) {
   document.getElementById("game-info-phase").textContent = phase;
 }
 
-function updateGameInfoMove() {}
+function updateGameInfoMove() {
+  document.getElementById("game-info-move").textContent = Math.floor(
+    moves_played / 2 + 1
+  );
+}
 
 function startGame() {
   // Get selected options
@@ -167,29 +174,29 @@ function startGame() {
   const game = new Game(boardSize, opponent, difficulty, firstToPlay);
 
   // For testing
-  game.dropPiece(0, 0, "blue");
-  game.dropPiece(0, 1, "orange");
-  game.dropPiece(0, 2, "blue");
-  game.dropPiece(0, 3, "orange");
-  game.dropPiece(0, 4, "blue");
-  game.dropPiece(1, 0, "orange");
-  game.dropPiece(1, 1, "blue");
-  game.dropPiece(1, 2, "orange");
-  game.dropPiece(1, 3, "blue");
-  game.dropPiece(1, 4, "orange");
-  game.dropPiece(2, 0, "blue");
-  game.dropPiece(2, 1, "orange");
-  game.dropPiece(2, 2, "blue");
-  game.dropPiece(2, 3, "orange");
-  game.dropPiece(2, 4, "blue");
-  game.dropPiece(3, 0, "orange");
-  game.dropPiece(3, 1, "blue");
-  game.dropPiece(3, 2, "orange");
-  game.dropPiece(3, 3, "blue");
-  game.dropPiece(3, 4, "orange");
-  game.dropPiece(4, 0, "blue");
-  game.dropPiece(4, 1, "orange");
-  game.dropPiece(4, 2, "blue");
+  //game.dropPiece(0, 0, "blue");
+  //game.dropPiece(0, 1, "orange");
+  //game.dropPiece(0, 2, "blue");
+  //game.dropPiece(0, 3, "orange");
+  //game.dropPiece(0, 4, "blue");
+  //game.dropPiece(1, 0, "orange");
+  //game.dropPiece(1, 1, "blue");
+  //game.dropPiece(1, 2, "orange");
+  //game.dropPiece(1, 3, "blue");
+  //game.dropPiece(1, 4, "orange");
+  //game.dropPiece(2, 0, "blue");
+  //game.dropPiece(2, 1, "orange");
+  //game.dropPiece(2, 2, "blue");
+  //game.dropPiece(2, 3, "orange");
+  //game.dropPiece(2, 4, "blue");
+  //game.dropPiece(3, 0, "orange");
+  //game.dropPiece(3, 1, "blue");
+  //game.dropPiece(3, 2, "orange");
+  //game.dropPiece(3, 3, "blue");
+  //game.dropPiece(3, 4, "orange");
+  //game.dropPiece(4, 0, "blue");
+  //game.dropPiece(4, 1, "orange");
+  //game.dropPiece(4, 2, "blue");
 
   createGameElements(game);
 
@@ -281,8 +288,10 @@ function handleClickCellOnDropPhase(game, cell) {
   // Drop piece
   if (game.dropPiece(row, col)) {
     console.log("piece dropped successfully");
+    moves_played++;
     game.flipTurn();
     updateGameInfoTurn();
+    updateGameInfoMove();
 
     // Recreate board
     createGameElements(game);
@@ -428,8 +437,10 @@ function handleClickCellOnMovePhase(game, cell) {
     );
     if (move_result === 1) {
       console.log("piece moved successfully");
+      moves_played++;
       game.flipTurn();
       updateGameInfoTurn();
+      updateGameInfoMove();
 
       // Recreate board
       createGameElements(game);
@@ -474,10 +485,12 @@ function handleClickCellOnTakePhase(game, cell) {
   // Remove piece
   if (game.removePiece(row, col)) {
     console.log("piece removed successfully");
+    moves_played++;
     game.flipTurn();
     updateGameInfoTurn();
     game.phase = "move"; // Revert back to move phase
     updateGameInfoPhase("move");
+    updateGameInfoMove();
 
     // Recreate board
     createGameElements(game);
