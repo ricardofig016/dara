@@ -49,6 +49,8 @@ function goToOptions() {
 
   // Display options section
   document.getElementById("options").style.display = "block";
+
+  // Reset previous options
   resetOptions();
 }
 
@@ -174,11 +176,11 @@ function startGame() {
   const game = new Game(boardSize, opponent, difficulty, firstToPlay);
 
   // For testing
-  //game.dropPiece(0, 0, "blue");
-  //game.dropPiece(0, 1, "orange");
-  //game.dropPiece(0, 2, "blue");
-  //game.dropPiece(0, 3, "orange");
-  //game.dropPiece(0, 4, "blue");
+  game.dropPiece(0, 0, "blue");
+  game.dropPiece(0, 1, "orange");
+  game.dropPiece(0, 2, "blue");
+  game.dropPiece(0, 3, "orange");
+  game.dropPiece(0, 4, "blue");
   //game.dropPiece(1, 0, "orange");
   //game.dropPiece(1, 1, "blue");
   //game.dropPiece(1, 2, "orange");
@@ -269,6 +271,7 @@ function createGameElements(game) {
 }
 
 function handleClickCell(game, cell) {
+  // Handle click for each phase
   if (game.phase === "drop") {
     handleClickCellOnDropPhase(game, cell);
   } else if (game.phase === "move") {
@@ -277,6 +280,19 @@ function handleClickCell(game, cell) {
     handleClickCellOnTakePhase(game, cell);
   } else {
     console.error("not a valid phase name");
+  }
+
+  // Check if game is over
+  console.log(game.isGameOver());
+  if (game.phase == "move" && game.isGameOver()) {
+    let player_wins = true;
+    if (piece.includes(game.turn)) {
+      player_wins = false;
+    }
+    // Insert a 1000ms delay
+    setTimeout(function () {
+      showGameOver(player_wins);
+    }, 1000);
   }
   return;
 }
@@ -400,7 +416,10 @@ function handleClickCellOnMovePhase(game, cell) {
     }
 
     // Select the cell
-    if (game.canMove(cell.dataset.row, cell.dataset.col, color)) {
+    if (
+      game.isValidCell(cell.dataset.row, cell.dataset.col) &&
+      game.turn === color
+    ) {
       cell.dataset.selected = "true";
       colorValidCells();
       highlightSelectedCell(cell);
@@ -614,6 +633,38 @@ function showSettings() {
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
       document.getElementById("settings-popup").style.display = "none";
+    }
+  });
+}
+
+function showGameOver(player_wins) {
+  // Display popup
+  document.getElementById("winner-popup").style.display = "flex";
+
+  // Get elements
+  const closeButton = document.getElementById("winner-popup-close");
+
+  // Find win or lose
+  let winner_p = document.getElementById("winner-popup-result");
+  if (player_wins) {
+    winner_p.style.color = "#008800";
+    winner_p.textContent = "You Win!!";
+  } else {
+    winner_p.style.color = "#dd0000";
+    winner_p.textContent = "You Lose...";
+  }
+
+  // Add an event listener to close the popup when the close button is clicked
+  closeButton.addEventListener("click", () => {
+    document.getElementById("winner-popup").style.display = "none";
+    goToOptions();
+  });
+
+  // Add an event listener to close the popup when ESCAPE is pressed
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      document.getElementById("winner-popup").style.display = "none";
+      goToOptions();
     }
   });
 }
