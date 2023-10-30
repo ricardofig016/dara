@@ -93,15 +93,11 @@ function resetOptions() {
 }
 
 function fillGameInfoText() {
-  // Who plays first
-  if (piece.includes(firstToPlay)) {
-    document.getElementById("game-info-turn").textContent = username;
-  } else {
-    document.getElementById("game-info-turn").textContent = opponent;
-  }
+  // Turn
+  updateGameInfoTurn();
 
   // Phase
-  document.getElementById("game-info-phase").textContent = "drop";
+  updateGameInfoPhase("drop");
 
   // Piece Color
   if (piece.includes("orange")) {
@@ -126,6 +122,32 @@ function fillGameInfoText() {
   // Moves played
   document.getElementById("game-info-move").textContent = moves_played / 2;
 }
+
+function updateGameInfoTurn() {
+  // get first and second player's names
+  let first_p = "";
+  let second_p = "";
+  if (piece.includes(firstToPlay)) {
+    first_p = username;
+    second_p = opponent;
+  } else {
+    first_p = opponent;
+    second_p = username;
+  }
+
+  // Its player 1's turn
+  if (moves_played % 2 === 0) {
+    document.getElementById("game-info-turn").textContent = first_p;
+  } else {
+    document.getElementById("game-info-turn").textContent = second_p;
+  }
+}
+
+function updateGameInfoPhase(phase) {
+  document.getElementById("game-info-phase").textContent = phase;
+}
+
+function updateGameInfoMove() {}
 
 function startGame() {
   // Get selected options
@@ -260,6 +282,7 @@ function handleClickCellOnDropPhase(game, cell) {
   if (game.dropPiece(row, col)) {
     console.log("piece dropped successfully");
     game.flipTurn();
+    updateGameInfoTurn();
 
     // Recreate board
     createGameElements(game);
@@ -272,6 +295,7 @@ function handleClickCellOnDropPhase(game, cell) {
   const blue_p = game.getPieces("blue");
   if (orange_p === blue_p && orange_p >= game.max_pieces) {
     game.phase = "move";
+    updateGameInfoPhase("move");
   }
   return;
 }
@@ -405,6 +429,7 @@ function handleClickCellOnMovePhase(game, cell) {
     if (move_result === 1) {
       console.log("piece moved successfully");
       game.flipTurn();
+      updateGameInfoTurn();
 
       // Recreate board
       createGameElements(game);
@@ -412,6 +437,7 @@ function handleClickCellOnMovePhase(game, cell) {
     } else if (move_result === 2) {
       console.log("piece moved successfully");
       game.phase = "take";
+      updateGameInfoPhase("move"); // 'take' phase is displayed as 'move'
 
       // Recreate board
       createGameElements(game);
@@ -449,7 +475,9 @@ function handleClickCellOnTakePhase(game, cell) {
   if (game.removePiece(row, col)) {
     console.log("piece removed successfully");
     game.flipTurn();
+    updateGameInfoTurn();
     game.phase = "move"; // Revert back to move phase
+    updateGameInfoPhase("move");
 
     // Recreate board
     createGameElements(game);
