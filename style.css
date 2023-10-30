@@ -207,6 +207,24 @@ nav button {
   margin-left: 8px;
 }
 
+#game-info-div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-left: 10px;
+}
+
+#game-info-div p {
+  margin: 0;
+  padding: 5px;
+  flex-grow: 1;
+}
+
+#game-info-div p strong {
+  margin-right: 10px;
+  white-space: nowrap;
+}
+
 #game #board {
   display: flex;
   flex-wrap: wrap;
