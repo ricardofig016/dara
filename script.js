@@ -203,6 +203,8 @@ function handleClickCell(game, cell) {
     handleClickCellOnDropPhase(game, cell);
   } else if (game.phase === "move") {
     handleClickCellOnMovePhase(game, cell);
+  } else if (game.phase === "take") {
+    handleClickCellOnTakePhase(game, cell);
   } else {
     console.error("not a valid phase name");
   }
@@ -353,21 +355,27 @@ function handleClickCellOnMovePhase(game, cell) {
     }
 
     // Move piece
-    if (
-      game.movePiece(
-        selected_cell.dataset.row,
-        selected_cell.dataset.col,
-        cell.dataset.row,
-        cell.dataset.col
-      )
-    ) {
+    let move_result = game.movePiece(
+      selected_cell.dataset.row,
+      selected_cell.dataset.col,
+      cell.dataset.row,
+      cell.dataset.col
+    );
+    if (move_result === 1) {
       console.log("piece moved successfully");
       game.flipTurn();
 
       // Recreate board
       createGameElements(game);
       revertAllCells();
-    } else {
+    } else if (move_result === 2) {
+      console.log("piece moved successfully");
+      game.phase = "take";
+
+      // Recreate board
+      createGameElements(game);
+      revertAllCells();
+    } else if (move_result === 0) {
       revertAllCells();
       // Reselect another piece
       if (cell != selected_cell) {
@@ -390,6 +398,23 @@ function handleClickCellOnMovePhase(game, cell) {
   }
   firstSelection();
   return;
+}
+
+function handleClickCellOnTakePhase(game, cell) {
+  const row = cell.dataset.row;
+  const col = cell.dataset.col;
+
+  // Remove piece
+  if (game.removePiece(row, col)) {
+    console.log("piece removed successfully");
+    game.flipTurn();
+    game.phase = "move"; // Revert back to move phase
+
+    // Recreate board
+    createGameElements(game);
+  } else {
+    console.log("this drop is not valid");
+  }
 }
 
 // ---------------------- NOT COMPLETED ----------------------
