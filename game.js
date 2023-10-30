@@ -22,7 +22,7 @@ export class Game {
     this.phase = "drop"; // Can be 'drop', 'move' or 'take'
     this.orange_prev_move = null; // [oldRow, oldCol, newRow, newCol]
     this.blue_prev_move = null; // [oldRow, oldCol, newRow, newCol]
-    this.max_pieces = 12; // Each player has a total of 12 pieces
+    this.max_pieces = 3; // Each player has a total of 12 pieces
   }
 
   flipTurn() {
@@ -49,7 +49,14 @@ export class Game {
   canMove(row, col, color) {
     if (this.isValidCell(row, col)) {
       if (this.turn === color) {
-        return true;
+        if (
+          this.isValidMove(row, col, row + 1, col) ||
+          this.isValidMove(row, col, row, col + 1) ||
+          this.isValidMove(row, col, row - 1, col) ||
+          this.isValidMove(row, col, row, col - 1)
+        ) {
+          return true;
+        }
       }
     }
     return false;
@@ -167,6 +174,19 @@ export class Game {
     return false;
   }
 
+  // Amount of pieces of a color currently on the board
+  getPieces(color) {
+    let pieces = 0;
+    for (let row of this.board) {
+      for (let cell of row) {
+        if (cell === color) {
+          pieces++;
+        }
+      }
+    }
+    return pieces;
+  }
+
   // Check if a cell exists on the board
   isValidCell(row, col) {
     // Make sure row and col are numbers
@@ -225,19 +245,6 @@ export class Game {
 
     // The drop is valid
     return true;
-  }
-
-  // Amount of pieces of a color currently on the board
-  getPieces(color) {
-    let pieces = 0;
-    for (let row of this.board) {
-      for (let cell of row) {
-        if (cell === color) {
-          pieces++;
-        }
-      }
-    }
-    return pieces;
   }
 
   isValidMove(oldRow, oldCol, newRow, newCol) {
@@ -328,6 +335,28 @@ export class Game {
 
     // The move is valid
     return true;
+  }
+
+  isGameOver(color = this.turn) {
+    // true if:
+    //  - the player cant make a valid move or
+    //  - has less then 3 pieces
+    let piece_count = 0;
+    let can_move = false;
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.cols; col++) {
+        if (this.board[row][col] === color) {
+          piece_count++;
+          if (this.canMove(row, col, color)) {
+            can_move = true;
+          }
+        }
+      }
+    }
+    if (piece_count < 3 || !can_move) {
+      return true;
+    }
+    return false;
   }
 }
 
