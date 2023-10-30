@@ -198,11 +198,6 @@ function createGameElements(game) {
   }
 }
 
-// Change background color of cell is its selected
-function colorValidCell(cell) {
-  cell.style.backgroundColor = "#73df3b";
-}
-
 function handleClickCell(game, cell) {
   if (game.phase === "drop") {
     handleClickCellOnDropPhase(game, cell);
@@ -297,11 +292,7 @@ function handleClickCellOnMovePhase(game, cell) {
           `[data-row="${row}"][data-col="${col}"]`
         );
         if (game.isValidMove(cell.dataset.row, cell.dataset.col, row, col)) {
-          console.log(
-            [cell.dataset.row, cell.dataset.col, row, col],
-            "is a valid move"
-          );
-          colorValidCell(candidate_cell);
+          candidate_cell.style.backgroundColor = "#73df3b";
         }
       }
     }
@@ -375,8 +366,14 @@ function handleClickCellOnMovePhase(game, cell) {
 
       // Recreate board
       createGameElements(game);
+      revertAllCells();
+    } else {
+      revertAllCells();
+      // Reselect another piece
+      if (cell != selected_cell) {
+        firstSelection();
+      }
     }
-    revertAllCells();
     return;
   }
 
