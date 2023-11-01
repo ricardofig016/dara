@@ -275,7 +275,6 @@ nav button {
 
 #leaderboard-popup,
 #rules-popup,
-#settings-popup,
 #winner-popup {
   position: fixed;
   top: 0;
@@ -312,7 +311,6 @@ nav button {
 
 #leaderboard-popup-close,
 #rules-popup-close,
-#settings-popup-close,
 #winner-popup-close {
   font-size: 24px;
   font-weight: bold;

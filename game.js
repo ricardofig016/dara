@@ -16,8 +16,8 @@ export class Game {
     );
 
     // Opponent, difficulty, turn, phase, prev_move, max_pieces
-    this.opponent = "computer"; // IMPORTANT -> 1v1 not implemented yet
-    this.difficulty = difficulty;
+    this.opponent = opponent;
+    this.difficulty = difficulty; // Can be 'easy', 'medium' or 'hard'
     this.turn = firstToPlay;
     this.phase = "drop"; // Can be 'drop', 'move' or 'take'
     this.orange_prev_move = null; // [oldRow, oldCol, newRow, newCol]
@@ -133,6 +133,73 @@ export class Game {
     for (
       let i = row + 1;
       i < this.rows && this.board[i][col] === this.turn;
+      i++
+    ) {
+      verticalCount++;
+    }
+    if (verticalCount >= 3) {
+      return true; // 3-in-line vertically
+    }
+
+    // There is no 3 in line
+    return false;
+  }
+
+  willMakeLine(oldRow, oldCol, newRow, newCol) {
+    // Make sure row and col are numbers
+    oldRow = parseInt(oldRow);
+    oldCol = parseInt(oldCol);
+    newRow = parseInt(newRow);
+    newCol = parseInt(newCol);
+
+    // The cell doesnt exist
+    if (
+      !this.isValidCell(newRow, newCol) ||
+      !this.isValidCell(oldRow, oldCol)
+    ) {
+      return false;
+    }
+
+    // Check horizontally
+    let horizontalCount = 1;
+    for (
+      let i = newCol - 1;
+      i >= 0 &&
+      this.board[newRow][i] === this.turn &&
+      (newRow != oldRow || i != oldCol);
+      i--
+    ) {
+      horizontalCount++;
+    }
+    for (
+      let i = newCol + 1;
+      i < this.cols &&
+      this.board[newRow][i] === this.turn &&
+      (newRow != oldRow || i != oldCol);
+      i++
+    ) {
+      horizontalCount++;
+    }
+    if (horizontalCount >= 3) {
+      return true; // 3-in-line horizontally
+    }
+
+    // Check vertically
+    let verticalCount = 1;
+    for (
+      let i = newRow - 1;
+      i >= 0 &&
+      this.board[i][newCol] === this.turn &&
+      (i != oldRow || newCol != oldCol);
+      i--
+    ) {
+      verticalCount++;
+    }
+    for (
+      let i = newRow + 1;
+      i < this.rows &&
+      this.board[i][newCol] === this.turn &&
+      (i != oldRow || newCol != oldCol);
       i++
     ) {
       verticalCount++;
@@ -357,6 +424,153 @@ export class Game {
       return true;
     }
     return false;
+  }
+
+  playComputer() {
+    /**
+     * Returns:
+     *  - 0 , if nothing was played
+     *  - 1 , if something was played without taking pieces
+     *  - 2 , if a piece was taken
+     */
+    if (this.opponent != "computer") {
+      return 0;
+    }
+    // Select phase
+    if (this.phase === "drop") {
+      this.playComputerDrop();
+      return 1;
+    } else if (this.phase === "move") {
+      return this.playComputerMove();
+    } else if (this.phase === "take") {
+      this.playComputerTake();
+      return 2;
+    }
+  }
+
+  playComputerDrop() {
+    // Store valid drops
+    let valid_drops = [];
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.cols; col++) {
+        if (this.isValidDrop(row, col)) {
+          valid_drops.push([row, col]);
+        }
+      }
+    }
+
+    if (this.difficulty === "easy" || this.difficulty === "medium") {
+      // Select random valid drop
+      const random_index = Math.floor(Math.random() * valid_drops.length);
+      const random_drop = valid_drops[random_index];
+      // Play random drop
+      this.dropPiece(random_drop[0], random_drop[1]);
+    } else if (this.difficulty === "hard") {
+      // 'Hard' difficulty not implemented yet
+    }
+  }
+
+  playComputerMove() {
+    // Store pieces that can move
+    let valid_pieces = [];
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.cols; col++) {
+        if (this.canMove(row, col, this.board[row][col])) {
+          valid_pieces.push([row, col]);
+        }
+      }
+    }
+    // Store valid moves
+    let valid_moves = [];
+    for (let i = 0; i < valid_pieces.length; i++) {
+      const [row, col] = valid_pieces[i];
+      if (this.isValidMove(row, col, row + 1, col)) {
+        valid_moves.push([row, col, row + 1, col]);
+      }
+      if (this.isValidMove(row, col, row, col + 1)) {
+        valid_moves.push([row, col, row, col + 1]);
+      }
+      if (this.isValidMove(row, col, row - 1, col)) {
+        valid_moves.push([row, col, row - 1, col]);
+      }
+      if (this.isValidMove(row, col, row, col - 1)) {
+        valid_moves.push([row, col, row, col - 1]);
+      }
+    }
+    // Select random move
+    const random_index = Math.floor(Math.random() * valid_moves.length);
+    const random_move = valid_moves[random_index];
+
+    if (this.difficulty === "easy") {
+      // Play random move
+      if (
+        this.movePiece(
+          random_move[0],
+          random_move[1],
+          random_move[2],
+          random_move[3]
+        ) === 2
+      ) {
+        // The move makes a 3-in-line
+        this.playComputerTake();
+        return 2;
+      }
+      return 1;
+    } else if (this.difficulty === "medium") {
+      // Play move that makes 3-in-line
+      for (let valid_move of valid_moves) {
+        if (
+          this.willMakeLine(
+            valid_move[0],
+            valid_move[1],
+            valid_move[2],
+            valid_move[3]
+          )
+        ) {
+          this.movePiece(
+            valid_move[0],
+            valid_move[1],
+            valid_move[2],
+            valid_move[3]
+          );
+          this.playComputerTake();
+          return 2;
+        }
+      }
+      // Play random move
+      this.movePiece(
+        random_move[0],
+        random_move[1],
+        random_move[2],
+        random_move[3]
+      );
+      return 1;
+    } else if (this.difficulty === "hard") {
+      // 'Hard' difficulty not implemented yet
+    }
+  }
+
+  playComputerTake() {
+    // Store valid takes
+    let valid_takes = [];
+    for (let row = 0; row < this.rows; row++) {
+      for (let col = 0; col < this.cols; col++) {
+        if (this.board[row][col] && this.board[row][col] != this.turn) {
+          valid_takes.push([row, col]);
+        }
+      }
+    }
+
+    if (this.difficulty === "easy" || this.difficulty === "medium") {
+      // Select random take
+      const random_index = Math.floor(Math.random() * valid_takes.length);
+      const random_take = valid_takes[random_index];
+      // Take random piece
+      this.removePiece(random_take[0], random_take[1]);
+    } else if (this.difficulty === "hard") {
+      // 'Hard' difficulty not implemented yet
+    }
+    return;
   }
 }
 

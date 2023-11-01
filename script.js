@@ -165,6 +165,11 @@ function startGame() {
   difficulty = document.getElementById("difficulty").value;
   firstToPlay = document.getElementById("first-to-play").value;
 
+  if (firstToPlay === "random") {
+    const options = ["orange", "blue"];
+    firstToPlay = options[Math.floor(Math.random() * 2)];
+  }
+
   // Hide the options and show the game section
   document.getElementById("options").style.display = "none";
   document.getElementById("game").style.display = "block";
@@ -271,6 +276,17 @@ function createGameElements(game) {
   }
 }
 
+function handleGameOver(game) {
+  let player_wins = true;
+  if (piece.includes(game.turn)) {
+    player_wins = false;
+  }
+  // Insert a 800ms delay
+  setTimeout(function () {
+    showGameOver(player_wins);
+  }, 800);
+}
+
 function handleClickCell(game, cell) {
   // Handle click for each phase
   if (game.phase === "drop") {
@@ -285,15 +301,9 @@ function handleClickCell(game, cell) {
 
   // Check if game is over
   if (game.phase == "move" && game.isGameOver()) {
-    let player_wins = true;
-    if (piece.includes(game.turn)) {
-      player_wins = false;
-    }
-    // Insert a 1000ms delay
-    setTimeout(function () {
-      showGameOver(player_wins);
-    }, 1000);
+    handleGameOver(game);
   }
+
   return;
 }
 
@@ -309,6 +319,23 @@ function handleClickCellOnDropPhase(game, cell) {
     game.flipTurn();
     updateGameInfoTurn();
     updateGameInfoMove();
+    // Check if game is over
+    if (game.phase == "move" && game.isGameOver()) {
+      handleGameOver(game);
+    }
+    setTimeout(() => {
+      // Computer Drop
+      const computer_result = game.playComputer();
+      if (computer_result != 0) {
+        hidePieceFromPieceSet(game.turn);
+        moves_played++;
+        game.flipTurn();
+        updateGameInfoTurn();
+        updateGameInfoMove();
+      }
+      // Recreate board
+      createGameElements(game);
+    }, 400);
 
     // Recreate board
     createGameElements(game);
@@ -462,6 +489,28 @@ function handleClickCellOnMovePhase(game, cell) {
       game.flipTurn();
       updateGameInfoTurn();
       updateGameInfoMove();
+      // Check if game is over
+      if (game.phase == "move" && game.isGameOver()) {
+        handleGameOver(game);
+      }
+      setTimeout(() => {
+        // Computer move
+        const computer_result = game.playComputer();
+        console.log(computer_result);
+        if (computer_result === 2) {
+          game.flipTurn();
+          showPieceFromPieceSet(game.turn);
+          game.flipTurn();
+        }
+        if (computer_result != 0) {
+          moves_played++;
+          game.flipTurn();
+          updateGameInfoTurn();
+          updateGameInfoMove();
+        }
+        // Recreate board
+        createGameElements(game);
+      }, 400);
 
       // Recreate board
       createGameElements(game);
@@ -513,6 +562,28 @@ function handleClickCellOnTakePhase(game, cell) {
     game.phase = "move"; // Revert back to move phase
     updateGameInfoPhase("move");
     updateGameInfoMove();
+    // Check if game is over
+    if (game.phase == "move" && game.isGameOver()) {
+      handleGameOver(game);
+    }
+    setTimeout(() => {
+      // Computer move
+      const computer_result = game.playComputer();
+      console.log(computer_result);
+      if (computer_result === 2) {
+        game.flipTurn();
+        showPieceFromPieceSet(game.turn);
+        game.flipTurn();
+      }
+      if (computer_result != 0) {
+        moves_played++;
+        game.flipTurn();
+        updateGameInfoTurn();
+        updateGameInfoMove();
+      }
+      // Recreate board
+      createGameElements(game);
+    }, 400);
 
     // Recreate board
     createGameElements(game);
@@ -565,8 +636,6 @@ function resetPieceSets() {
     .getElementById("board-and-pieces")
     .getElementsByClassName("piece-image");
 
-  console.log(pieces[0].getAttribute("src"));
-  console.log(piece);
   if (pieces[0].getAttribute("src") != piece) {
     flipPieceSets();
   }
@@ -691,27 +760,6 @@ function showRules() {
   });
 }
 
-// ---------------------- NOT COMPLETED ----------------------
-function showSettings() {
-  // Display popup
-  document.getElementById("settings-popup").style.display = "flex";
-
-  // Get elements
-  const closeButton = document.getElementById("settings-popup-close");
-
-  // Add an event listener to close the popup when the close button is clicked
-  closeButton.addEventListener("click", () => {
-    document.getElementById("settings-popup").style.display = "none";
-  });
-
-  // Add an event listener to close the popup when ESCAPE is pressed
-  document.addEventListener("keydown", (event) => {
-    if (event.key === "Escape") {
-      document.getElementById("settings-popup").style.display = "none";
-    }
-  });
-}
-
 function showGameOver(player_wins) {
   // Display popup
   document.getElementById("winner-popup").style.display = "flex";
@@ -774,9 +822,6 @@ for (const button of document.getElementsByClassName("leaderboard-button")) {
 }
 for (const button of document.getElementsByClassName("rules-button")) {
   button.addEventListener("click", showRules);
-}
-for (const button of document.getElementsByClassName("settings-button")) {
-  button.addEventListener("click", showSettings);
 }
 
 // Event listener for the opponent dropdown
