@@ -201,6 +201,7 @@ function startGame() {
   //game.dropPiece(4, 2, "blue");
 
   createGameElements(game);
+  resetPieceSets();
 
   // Log options to the console
   console.log("Selected options: ", {
@@ -283,7 +284,6 @@ function handleClickCell(game, cell) {
   }
 
   // Check if game is over
-  console.log(game.isGameOver());
   if (game.phase == "move" && game.isGameOver()) {
     let player_wins = true;
     if (piece.includes(game.turn)) {
@@ -304,6 +304,7 @@ function handleClickCellOnDropPhase(game, cell) {
   // Drop piece
   if (game.dropPiece(row, col)) {
     console.log("piece dropped successfully");
+    hidePieceFromPieceSet(game.turn);
     moves_played++;
     game.flipTurn();
     updateGameInfoTurn();
@@ -321,6 +322,7 @@ function handleClickCellOnDropPhase(game, cell) {
   if (orange_p === blue_p && orange_p >= game.max_pieces) {
     game.phase = "move";
     updateGameInfoPhase("move");
+    flipPieceSets();
   }
   return;
 }
@@ -506,6 +508,7 @@ function handleClickCellOnTakePhase(game, cell) {
     console.log("piece removed successfully");
     moves_played++;
     game.flipTurn();
+    showPieceFromPieceSet(game.turn);
     updateGameInfoTurn();
     game.phase = "move"; // Revert back to move phase
     updateGameInfoPhase("move");
@@ -514,8 +517,80 @@ function handleClickCellOnTakePhase(game, cell) {
     // Recreate board
     createGameElements(game);
   } else {
-    console.log("this drop is not valid");
+    console.log("this take is not valid");
   }
+}
+
+function hidePieceFromPieceSet(color) {
+  const pieces = document
+    .getElementById("board-and-pieces")
+    .getElementsByClassName("piece-image");
+
+  let target_piece = "";
+  for (let i = 0; i < pieces.length; i++) {
+    const piece = pieces[i];
+    if (
+      piece.getAttribute("src").includes(color) &&
+      piece.style.display != "none"
+    ) {
+      target_piece = piece;
+    }
+  }
+  // Hide piece-image
+  target_piece.style.display = "none";
+  return;
+}
+
+function showPieceFromPieceSet(color) {
+  const pieces = document
+    .getElementById("board-and-pieces")
+    .getElementsByClassName("piece-image");
+
+  for (let i = 0; i < pieces.length; i++) {
+    const piece = pieces[i];
+    if (
+      piece.getAttribute("src").includes(color) &&
+      piece.style.display === "none"
+    ) {
+      // Show piece-image
+      piece.style.display = "inline";
+      return;
+    }
+  }
+  return;
+}
+
+function resetPieceSets() {
+  const pieces = document
+    .getElementById("board-and-pieces")
+    .getElementsByClassName("piece-image");
+
+  console.log(pieces[0].getAttribute("src"));
+  console.log(piece);
+  if (pieces[0].getAttribute("src") != piece) {
+    flipPieceSets();
+  }
+
+  for (let i = 0; i < pieces.length; i++) {
+    pieces[i].style.display = "inline";
+  }
+  return;
+}
+
+function flipPieceSets() {
+  const pieces = document
+    .getElementById("board-and-pieces")
+    .getElementsByClassName("piece-image");
+
+  for (let i = 0; i < pieces.length; i++) {
+    const piece = pieces[i];
+    if (piece.getAttribute("src").includes("orange")) {
+      piece.setAttribute("src", bluePiecePath);
+    } else {
+      piece.setAttribute("src", orangePiecePath);
+    }
+  }
+  return;
 }
 
 // ---------------------- NOT COMPLETED ----------------------
