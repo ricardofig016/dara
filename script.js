@@ -341,6 +341,7 @@ function handleClickCellOnDropPhase(game, cell) {
     createGameElements(game);
   } else {
     console.log("this drop is not valid");
+    showPopUp("Invalid drop!", 1);
   }
 
   // Advance to move phase
@@ -442,6 +443,7 @@ function handleClickCellOnMovePhase(game, cell) {
     // Tried to select a piece on the other color's turn
     if (color != game.turn) {
       console.log("not your turn");
+      showPopUp("Not your turn", 1);
     }
 
     // Select the cell
@@ -519,6 +521,7 @@ function handleClickCellOnMovePhase(game, cell) {
       console.log("piece moved successfully");
       game.phase = "take";
       updateGameInfoPhase("move"); // 'take' phase is displayed as 'move'
+      showPopUp("You made a line, now choose a piece to take!", 0);
 
       // Recreate board
       createGameElements(game);
@@ -527,6 +530,7 @@ function handleClickCellOnMovePhase(game, cell) {
       revertAllCells();
       // Reselect another piece
       if (cell != selected_cell) {
+        showPopUp("Invalid Move!", 1);
         firstSelection();
       }
     }
@@ -589,6 +593,7 @@ function handleClickCellOnTakePhase(game, cell) {
     createGameElements(game);
   } else {
     console.log("this take is not valid");
+    showPopUp("Invalid Take!", 1);
   }
 }
 
@@ -790,6 +795,32 @@ function showGameOver(player_wins) {
       goToOptions();
     }
   });
+}
+
+function showPopUp(message, type){
+  var pop = document.getElementById("alert-popup");
+  //display Alert
+  pop.textContent = message;
+  if (type === 1){
+    pop.style.color = "#721c24";
+    pop.style.backgroundColor = "#f8d7da";
+    pop.style.borderColor = "#f5c6cb";
+  }else{
+    pop.style.color = "#19b6b6";
+    pop.style.backgroundColor = "#dbfcf7";
+    pop.style.borderColor = "#c6ecf5";
+  }
+  pop.style.display = "block";
+  pop.style.opacity = 1;
+  setTimeout(hidePopUp, 2000);
+}
+
+function hidePopUp() {
+  var pop = document.getElementById("alert-popup");
+  pop.style.opacity = 0; 
+  setTimeout(function () {
+    pop.style.display = 'none'; 
+  }, 1000); 
 }
 
 // Event listeners for buttons
