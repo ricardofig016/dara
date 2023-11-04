@@ -1,5 +1,14 @@
 # Dara
 
+### Authors
+Grupo 22
+
+202007202 - Ekaterina Aksenova
+
+202105430 - Ricardo Castro Figueiredo
+
+202107382 - Tomás dos Reis Leitão Torres Fontes
+
 ### Inspiration
 
 - Layout and Structure based on [247 Backgammon](https://www.247backgammon.org/)
