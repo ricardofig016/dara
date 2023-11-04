@@ -31,7 +31,6 @@ export class Game {
     } else {
       this.turn = "orange";
     }
-    return;
   }
 
   dropPiece(row, col, color = this.turn) {
@@ -104,7 +103,7 @@ export class Game {
     row = parseInt(row);
     col = parseInt(col);
 
-    // The cell doesnt exist or is empty
+    // The cell does not exist or is empty
     if (!this.isValidCell(row, col) || !this.board[row][col]) {
       return false;
     }
@@ -152,7 +151,7 @@ export class Game {
     newRow = parseInt(newRow);
     newCol = parseInt(newCol);
 
-    // The cell doesnt exist
+    // The cell does not exist
     if (
       !this.isValidCell(newRow, newCol) ||
       !this.isValidCell(oldRow, oldCol)
@@ -166,7 +165,7 @@ export class Game {
       let i = newCol - 1;
       i >= 0 &&
       this.board[newRow][i] === this.turn &&
-      (newRow != oldRow || i != oldCol);
+      (newRow !== oldRow || i !== oldCol);
       i--
     ) {
       horizontalCount++;
@@ -175,7 +174,7 @@ export class Game {
       let i = newCol + 1;
       i < this.cols &&
       this.board[newRow][i] === this.turn &&
-      (newRow != oldRow || i != oldCol);
+      (newRow !== oldRow || i !== oldCol);
       i++
     ) {
       horizontalCount++;
@@ -190,7 +189,7 @@ export class Game {
       let i = newRow - 1;
       i >= 0 &&
       this.board[i][newCol] === this.turn &&
-      (i != oldRow || newCol != oldCol);
+      (i !== oldRow || newCol !== oldCol);
       i--
     ) {
       verticalCount++;
@@ -199,7 +198,7 @@ export class Game {
       let i = newRow + 1;
       i < this.rows &&
       this.board[i][newCol] === this.turn &&
-      (i != oldRow || newCol != oldCol);
+      (i !== oldRow || newCol !== oldCol);
       i++
     ) {
       verticalCount++;
@@ -326,7 +325,7 @@ export class Game {
       !this.isValidCell(newRow, newCol) ||
       !this.board[oldRow][oldCol] ||
       this.board[newRow][newCol] ||
-      Math.abs(oldRow - newRow) + Math.abs(oldCol - newCol) != 1
+      Math.abs(oldRow - newRow) + Math.abs(oldCol - newCol) !== 1
     ) {
       return false;
     }
@@ -334,7 +333,7 @@ export class Game {
     const color = this.board[oldRow][oldCol];
 
     // Assign right previous move
-    let prev_m = null;
+    let prev_m;
     if (color === "orange") {
       prev_m = this.orange_prev_move;
     } else {
@@ -420,10 +419,8 @@ export class Game {
         }
       }
     }
-    if (piece_count < 3 || !can_move) {
-      return true;
-    }
-    return false;
+    return piece_count < 3 || !can_move;
+
   }
 
   playComputer() {
@@ -433,7 +430,7 @@ export class Game {
      *  - 1 , if something was played without taking pieces
      *  - 2 , if a piece was taken
      */
-    if (this.opponent != "computer") {
+    if (this.opponent !== "computer") {
       return 0;
     }
     // Select phase
@@ -555,7 +552,7 @@ export class Game {
     let valid_takes = [];
     for (let row = 0; row < this.rows; row++) {
       for (let col = 0; col < this.cols; col++) {
-        if (this.board[row][col] && this.board[row][col] != this.turn) {
+        if (this.board[row][col] && this.board[row][col] !== this.turn) {
           valid_takes.push([row, col]);
         }
       }
@@ -570,7 +567,6 @@ export class Game {
     } else if (this.difficulty === "hard") {
       // 'Hard' difficulty not implemented yet
     }
-    return;
   }
 }
 

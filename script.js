@@ -1,5 +1,6 @@
 import Game from "./game.js";
 
+let game = null;
 let username = "";
 let boardSize = "";
 let piece = "assets/orange_piece.png";
@@ -116,7 +117,7 @@ function fillGameInfoText() {
 
   // Difficulty
   document.getElementById("game-info-diff").textContent = difficulty;
-  if (opponent != "computer") {
+  if (opponent !== "computer") {
     document.getElementById("game-info-diff").parentElement.style.display =
       "none";
   } else {
@@ -130,8 +131,8 @@ function fillGameInfoText() {
 
 function updateGameInfoTurn() {
   // get first and second player's names
-  let first_p = "";
-  let second_p = "";
+  let first_p;
+  let second_p;
   if (piece.includes(firstToPlay)) {
     first_p = username;
     second_p = opponent;
@@ -154,11 +155,12 @@ function updateGameInfoPhase(phase) {
 
 function updateGameInfoMove() {
   document.getElementById("game-info-move").textContent = Math.floor(
-    moves_played / 2 + 1
+    moves_played / (2 + 1)
   );
 }
 
 function startGame() {
+  localStorage.setItem('startTime', new Date().getTime());
   // Get selected options
   boardSize = document.getElementById("board-size").value;
   opponent = document.getElementById("opponent").value;
@@ -178,7 +180,7 @@ function startGame() {
   fillGameInfoText();
 
   // Create Game object
-  const game = new Game(boardSize, opponent, difficulty, firstToPlay);
+  game = new Game(boardSize, opponent, difficulty, firstToPlay);
 
   // For testing
   //game.dropPiece(0, 0, "blue");
@@ -243,7 +245,7 @@ function createGameElements(game) {
       cell.style.height = cellSize + "px";
 
       // Change background-color of the cell based on parity
-      if ((row + col) % 2 == 0) {
+      if ((row + col) % 2 === 0) {
         cell.style.backgroundColor = "#fafafa";
       } else {
         cell.style.backgroundColor = "#cacaca";
@@ -276,10 +278,12 @@ function createGameElements(game) {
   }
 }
 
-function handleGameOver(game) {
+function handleGameOver(game, givenup= false) {
   let player_wins = true;
-  if (piece.includes(game.turn)) {
+  if (piece.includes(game.turn) || givenup) {
     player_wins = false;
+  } else {
+    addToLeaderboard();
   }
   // Insert a 800ms delay
   setTimeout(function () {
@@ -300,11 +304,9 @@ function handleClickCell(game, cell) {
   }
 
   // Check if game is over
-  if (game.phase == "move" && game.isGameOver()) {
+  if (game.phase === "move" && game.isGameOver()) {
     handleGameOver(game);
   }
-
-  return;
 }
 
 function handleClickCellOnDropPhase(game, cell) {
@@ -320,13 +322,13 @@ function handleClickCellOnDropPhase(game, cell) {
     updateGameInfoTurn();
     updateGameInfoMove();
     // Check if game is over
-    if (game.phase == "move" && game.isGameOver()) {
+    if (game.phase === "move" && game.isGameOver()) {
       handleGameOver(game);
     }
     setTimeout(() => {
       // Computer Drop
       const computer_result = game.playComputer();
-      if (computer_result != 0) {
+      if (computer_result !== 0) {
         hidePieceFromPieceSet(game.turn);
         moves_played++;
         game.flipTurn();
@@ -352,7 +354,6 @@ function handleClickCellOnDropPhase(game, cell) {
     updateGameInfoPhase("move");
     flipPieceSets();
   }
-  return;
 }
 
 function handleClickCellOnMovePhase(game, cell) {
@@ -441,7 +442,7 @@ function handleClickCellOnMovePhase(game, cell) {
     }
 
     // Tried to select a piece on the other color's turn
-    if (color != game.turn) {
+    if (color !== game.turn) {
       console.log("not your turn");
       showPopUp("Not your turn", 1);
     }
@@ -455,7 +456,6 @@ function handleClickCellOnMovePhase(game, cell) {
       colorValidCells();
       highlightSelectedCell(cell);
     }
-    return;
   }
 
   function secondSelection() {
@@ -492,7 +492,7 @@ function handleClickCellOnMovePhase(game, cell) {
       updateGameInfoTurn();
       updateGameInfoMove();
       // Check if game is over
-      if (game.phase == "move" && game.isGameOver()) {
+      if (game.phase === "move" && game.isGameOver()) {
         handleGameOver(game);
       }
       setTimeout(() => {
@@ -504,7 +504,7 @@ function handleClickCellOnMovePhase(game, cell) {
           showPieceFromPieceSet(game.turn);
           game.flipTurn();
         }
-        if (computer_result != 0) {
+        if (computer_result !== 0) {
           moves_played++;
           game.flipTurn();
           updateGameInfoTurn();
@@ -529,12 +529,11 @@ function handleClickCellOnMovePhase(game, cell) {
     } else if (move_result === 0) {
       revertAllCells();
       // Reselect another piece
-      if (cell != selected_cell) {
+      if (cell !== selected_cell) {
         showPopUp("Invalid Move!", 1);
         firstSelection();
       }
     }
-    return;
   }
 
   for (let row = 0; row < game.rows; row++) {
@@ -549,7 +548,6 @@ function handleClickCellOnMovePhase(game, cell) {
     }
   }
   firstSelection();
-  return;
 }
 
 function handleClickCellOnTakePhase(game, cell) {
@@ -567,7 +565,7 @@ function handleClickCellOnTakePhase(game, cell) {
     updateGameInfoPhase("move");
     updateGameInfoMove();
     // Check if game is over
-    if (game.phase == "move" && game.isGameOver()) {
+    if (game.phase === "move" && game.isGameOver()) {
       handleGameOver(game);
     }
     setTimeout(() => {
@@ -579,7 +577,7 @@ function handleClickCellOnTakePhase(game, cell) {
         showPieceFromPieceSet(game.turn);
         game.flipTurn();
       }
-      if (computer_result != 0) {
+      if (computer_result !== 0) {
         moves_played++;
         game.flipTurn();
         updateGameInfoTurn();
@@ -607,14 +605,13 @@ function hidePieceFromPieceSet(color) {
     const piece = pieces[i];
     if (
       piece.getAttribute("src").includes(color) &&
-      piece.style.display != "none"
+      piece.style.display !== "none"
     ) {
       target_piece = piece;
     }
   }
   // Hide piece-image
   target_piece.style.display = "none";
-  return;
 }
 
 function showPieceFromPieceSet(color) {
@@ -633,7 +630,6 @@ function showPieceFromPieceSet(color) {
       return;
     }
   }
-  return;
 }
 
 function resetPieceSets() {
@@ -641,14 +637,13 @@ function resetPieceSets() {
     .getElementById("board-and-pieces")
     .getElementsByClassName("piece-image");
 
-  if (pieces[0].getAttribute("src") != piece) {
+  if (pieces[0].getAttribute("src") !== piece) {
     flipPieceSets();
   }
 
   for (let i = 0; i < pieces.length; i++) {
     pieces[i].style.display = "inline";
   }
-  return;
 }
 
 function flipPieceSets() {
@@ -664,10 +659,9 @@ function flipPieceSets() {
       piece.setAttribute("src", orangePiecePath);
     }
   }
-  return;
 }
 
-// ---------------------- NOT COMPLETED ----------------------
+
 function showLeaderboard() {
   // Display popup
   document.getElementById("leaderboard-popup").style.display = "flex";
@@ -686,6 +680,52 @@ function showLeaderboard() {
       document.getElementById("leaderboard-popup").style.display = "none";
     }
   });
+}
+
+document.getElementById('giveupbtn').addEventListener('click', () => {
+  handleGameOver(game, true);
+});
+
+function secondsToHMS(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+
+  const hh = String(hours).padStart(2, '0');
+  const mm = String(minutes).padStart(2, '0');
+  const ss = String(Math.round(remainingSeconds)).padStart(2, '0');
+
+  return `${hh}:${mm}:${ss}`;
+}
+function addToLeaderboard(username= 'Guest') {
+  let endTime = new Date().getTime();
+  let gameTime = endTime - parseInt(localStorage.getItem('startTime'));
+  localStorage.removeItem('startTime');
+  let leaderBoard = JSON.parse(localStorage.getItem('leaderboard')) ?? [];
+  leaderBoard.push({name: username, time: gameTime});
+  leaderBoard.sort((a, b) => a.time - b.time);
+  leaderBoard.slice(0, 14);
+  localStorage.setItem('leaderboard', JSON.stringify(leaderBoard));
+  displayTable();
+}
+
+function displayTable(tableID = 'leaderboard-table') {
+  let leaderBoard = JSON.parse(localStorage.getItem('leaderboard')),
+      tableHTML = '<tr>' +
+          '<th>Ranking</th>' +
+          '<th>Name</th>' +
+          '<th>Best Time</th>' +
+          '</tr>';
+
+  leaderBoard.forEach(function (item, index) {
+    tableHTML += '<tr>' +
+        '<td>' + (index + 1) + '</td>' +
+        '<td>' + item.name + '</td>' +
+        '<td>' + secondsToHMS(item.time / 1000) + '</td>' +
+        '</tr>';
+  });
+
+  document.getElementById(tableID).innerHTML = tableHTML;
 }
 
 function showRules() {
@@ -707,7 +747,7 @@ function showRules() {
     .then((response) => response.text())
     .then((text) => {
       // Split the text into sections based on "[Section x]"
-      sections = text.split(/\[Section \d+\]/);
+      sections = text.split(/\[Section \d+]/);
       // Display the first section
       rules.innerHTML = sections[currentSection].trim();
     })
@@ -795,32 +835,32 @@ function showGameOver(player_wins) {
       goToOptions();
     }
   });
+  if (player_wins) {
+    showLeaderboard();
+  }
 }
 
 function showPopUp(message, type){
-  var pop = document.getElementById("alert-popup");
-  //display Alert
+  let pop = document.getElementById("alert-popup");
+  // display alert
   pop.textContent = message;
-  if (type === 1){
+  if (type === 1) {
     pop.style.color = "#721c24";
     pop.style.backgroundColor = "#f8d7da";
     pop.style.borderColor = "#f5c6cb";
-  }else{
+  } else {
     pop.style.color = "#19b6b6";
     pop.style.backgroundColor = "#dbfcf7";
     pop.style.borderColor = "#c6ecf5";
   }
   pop.style.display = "block";
-  pop.style.opacity = 1;
+  pop.style.opacity = '1';
   setTimeout(hidePopUp, 2000);
 }
 
 function hidePopUp() {
-  var pop = document.getElementById("alert-popup");
-  pop.style.opacity = 0; 
-  setTimeout(function () {
-    pop.style.display = 'none'; 
-  }, 1000); 
+  let pop = document.getElementById("alert-popup");
+  pop.style.opacity = '0';
 }
 
 // Event listeners for buttons

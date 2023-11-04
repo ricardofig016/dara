@@ -20,7 +20,7 @@ The game has 2 phases:</br>
 Are considered in a line:</br>
 - sequences of 3 or more contiguous pieces</br>
 - horizontally or vertically (not diagonally)</br>
-- all of the same color</br>
+- all of them the same color</br>
 
 [Section 4]
 <b>Placing the Pieces</b></br>
