@@ -19,9 +19,17 @@ function handleLogin(isGuest) {
 
   // Assign values to the variables
   username = document.getElementById("username").value;
+  let password = document.getElementById("password").value;
+
+  // sending request to login (which is register)
+
   if (isGuest) {
     username = "guest";
+  } else {
+    let request = register(username, password);
+    //if request.error = TODO show error popup
   }
+
 }
 
 function displayLoginErrorMessage() {
