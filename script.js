@@ -25,10 +25,14 @@ function handleLogin(isGuest) {
 
   if (isGuest) {
     username = "guest";
+  // } else if (registered) {
+  //   let login = login(group, username, password, size);
+  //   if login.error = notify(username, password, game, move);
   } else {
     let request = register(username, password);
     //if request.error = TODO show error popup
   }
+
 
 }
 
@@ -168,6 +172,7 @@ function updateGameInfoMove() {
 }
 
 function startGame() {
+  const timeoutId = setTimeout(timeout,120000);
   localStorage.setItem('startTime', new Date().getTime());
   // Get selected options
   boardSize = document.getElementById("board-size").value;
@@ -286,10 +291,17 @@ function createGameElements(game) {
   }
 }
 
+function timeout() {
+  console.log("Timeout completed after 2 minutes");
+  handleGameOver(game, true);
+}
+
 function handleGameOver(game, givenup= false) {
   let player_wins = true;
   if (piece.includes(game.turn) || givenup) {
     player_wins = false;
+    leave(username, game); //password??
+    //if request.error = TODO show error popup
   } else {
     addToLeaderboard();
   }
@@ -453,6 +465,7 @@ function handleClickCellOnMovePhase(game, cell) {
     if (color !== game.turn) {
       console.log("not your turn");
       showPopUp("Not your turn", 1);
+      // notify(username, password, game, move);
     }
 
     // Select the cell
@@ -483,6 +496,7 @@ function handleClickCellOnMovePhase(game, cell) {
 
     if (!selected_cell) {
       console.error("no cell is selected");
+      //notify(username, password, game, move);
       return;
     }
 
