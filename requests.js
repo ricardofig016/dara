@@ -1,4 +1,3 @@
-
 const baseUrl = "http://twserver.alunos.dcc.fc.up.pt:8008/";
 
 function newRequest (url, method, data=null) {
@@ -13,14 +12,15 @@ function newRequest (url, method, data=null) {
         }
     };
     xhttp.open(method, url, true);
-    xhttp.setRequestHeader('Content-Type', 'application/json');
+    xhttp.setRequestHeader("Content-Type", "application/json");
 
-    if(data) {
-        xhttp.send(JSON.stringify(data));
+    if (data) {
+      xhttp.send(JSON.stringify(data));
     } else {
-        xhttp.send();
+      xhttp.send();
     }
 }
+
 
 function register (nick, password) {
     if (!nick || !password) {
@@ -75,3 +75,4 @@ function ranking(group, size) {
     let data = { group: group, size: size };
     newRequest(baseUrl + "ranking", "POST", data);
 }
+
