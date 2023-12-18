@@ -75,6 +75,8 @@ export class Game {
     newRow = parseInt(newRow);
     newCol = parseInt(newCol);
 
+    sendSSEUpdate("game", "A move was made.");
+
     if (this.isValidMove(oldRow, oldCol, newRow, newCol)) {
       // Store new previous move
       let color = this.board[oldRow][oldCol];
